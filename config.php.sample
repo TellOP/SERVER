@@ -1,0 +1,100 @@
+<?php
+/* Copyright © 2016 University of Murcia
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+// Template configuration file for the TellOP Web application.
+//
+// To configure the application, copy this file to "config.php" and edit it as
+// necessary.
+$config = [
+    /** Database connection settings. */
+    'database' => [
+        /** DB server host. */
+        'host' => 'localhost',
+        /** Database name. */
+        'dbname' => 'tellop',
+        /** Database username. The specified user should have only INSERT,
+          * DELETE, ALTER and LOCK TABLES privileges on the database. */
+        'dbuser' => '',
+        /** Database password. */
+        'dbpassword' => '',
+    ],
+    /** E-mail settings. */
+    'email' => [
+        /** SMTP host. */
+        'host' => 'localhost',
+        /** SMTP server port. */
+        'port' => 25,
+        /** Encryption. Leave empty if not available, otherwise specify 'tls'
+          * or 'ssl'. */
+        'encryption' => '',
+        /** SMTP username. */
+        'username' => '',
+        /** SMTP password. */
+        'password' => '',
+        /** No-reply address the system should send e-mails from. */
+        'fromaddress' => 'noreply@tellop.eu',
+    ],
+    /** Logging settings. */
+    'log' => [
+        /** Path to the log file. Must be writable by PHP.
+          * This path should ideally be OUTSIDE the Web server root. */
+        'logPath' => __DIR__ . '/logs/tellop.log',
+        /** Minimum log level. */
+        'minLogLevel' => Monolog\Logger::INFO,
+    ],
+    /** Security settings. */
+    'security' => [
+        /** Public key PIN header. Generate one from
+          * <https://projects.dm.id.lv/s/pkp-online/calculator.html>.
+          * The first key specified in the calculator must be the one
+          * currently in use on the server; the second one is stored in the
+          * repository to be used when the first one expires. A third one
+          * is stored offline and is in the possession of Mattia Zago.
+          * When the time comes to roll your key over:
+          * 1) delete the private key on the server;
+          * 2) replace it with the private key stored in the repository;
+          * 3) replace the key stored in the repository with a freshly
+          *    generated private key;
+          * 4) regenerate the public key pin with a new one calculated from
+          *    - the new key on the server,
+          *    - the new key in the repository and
+          *    - the one kept offline. */
+        'publicKeyPIN' => 'pin-sha256="lPlAQ+4lYNotrmhKqgecdvNuiPMcqRghZ550/ij'
+            . 'EEmc="; pin-sha256="o2xBP6hSdfpcWSLd3z85B7MQD3tlpXYq351YRjoQiig'
+            . '="; pin-sha256="Y26/VmDl50h5yilijRnNbF5tynEu5Gaa0A0n68JDDXI="; '
+            . 'max-age=5184000',
+        /** cURL CA bundle. This is required under some configurations on
+          * Microsoft Windows where cURL does not use SChannel and is not
+          * shipped with a CA bundle: in that case, SSL connections will fail
+          * because the library is unable to verify the CA certificate, even if
+          * it is perfectly valid.
+          * In that case, download the CA bundle from
+          * <https://curl.haxx.se/docs/caextract.html>, put it in a location
+          * readable by the Web server and put its path here.
+          * If the CA bundle is not needed, leave the path empty. */
+        'curlBundle' => '',
+    ],
+    /** API keys for third-party services. */
+    'apikeys' => [
+        /** Collins Dictionary API key.
+          * Get one from <http://www.collinsdictionary.com/api> */
+        'collinsDictionary' => '',
+        /** Stands4 Dictionary Definitions API key.
+          * Get one from <http://www.definitions.net/api.php> */
+        'stands4DictionaryDefinitionsUID' => '',
+        'stands4DictionaryDefinitionsTokenID' => '',
+    ],
+];
+
+return $config;

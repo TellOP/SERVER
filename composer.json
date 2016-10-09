@@ -1,0 +1,83 @@
+{
+    "name": "tellop/tellop",
+    "description": "The Tell-OP Web application",
+    "type": "project",
+    "homepage": "http://www.tellop.eu/",
+    "license": "Apache-2.0",
+    "support": {
+        "issues": "",
+        "wiki": "",
+        "source": ""
+    },
+    "repositories": {
+        "bootstrap-validator": {
+            "type": "package",
+            "package": {
+                "name": "1000hz/bootstrap-validator",
+                "version": "0.10.2",
+                "source": {
+                    "url": "https://github.com/1000hz/bootstrap-validator",
+                    "type": "git",
+                    "reference": "v0.10.2"
+                }
+            }
+        },
+        "H5F": {
+            "type": "package",
+            "package": {
+                "name": "ryanseddon/H5F",
+                "version": "1.1.1",
+                "source": {
+                    "url": "https://github.com/ryanseddon/H5F",
+                    "type": "git",
+                    "reference": "v1.1.1"
+                }
+            }
+        },
+        "l10n": {
+            "type": "package",
+            "package": {
+                "name": "eligrey/l10n.js",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/eligrey/l10n.js",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    },
+    "require": {
+        "php": ">=5.6.0",
+        "mikecao/flight": "~1.2",
+        "bshaffer/oauth2-server-php": "~1.8",
+        "swiftmailer/swiftmailer": "5.*",
+        "monolog/monolog": "1.*",
+        "twbs/bootstrap": "3.*",
+        "components/jquery": "2.*",
+        "1000hz/bootstrap-validator": "0.10.2",
+        "ryanseddon/H5F": "1.1.1",
+        "ircmaxell/password-compat": "1.*",
+        "eligrey/l10n.js": "dev-master@dev"
+    },
+    "require-dev": {
+        "phpmd/phpmd" : "@stable",
+        "phpunit/phpunit": "5.5.*",
+        "phpunit/phpunit-selenium": "3.0.*",
+        "phpunit/dbunit": ">=1.2",
+        "wimg/php-compatibility": "7.0.*",
+        "simplyadmire/composer-plugins" : "2.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "TellOP\\": "src/",
+            "TellOP\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": "TellOP\\Installer::postUpdate",
+        "post-update-cmd": "TellOP\\Installer::postUpdate",
+        "test": "phpunit",
+        "generate-pot-file": "find src -iname '*.php' | xargs xgettext -d tellop -L PHP -j -c -w 80 --copyright-holder='Copyright (C) 2016, the TellOP developers' --foreign-user --package-name=TellOP --from-code=UTF-8 -o locale/messages.pot"
+    }
+}

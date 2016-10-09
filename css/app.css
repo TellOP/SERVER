@@ -1,0 +1,148 @@
+/* Copyright © 2016 University of Murcia
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* Use Roboto as the font face */
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-Regular.woff2") format("woff2"), url("/fonts/Roboto-Regular.woff") format("woff"), url("/fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-Regular.woff2") format("woff2"), url("/fonts/Roboto-Regular.woff") format("woff"), url("/fonts/Roboto-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-Italic.woff2") format("woff2"), url("/fonts/Roboto-Italic.woff") format("woff"), url("/fonts/Roboto-Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-Italic.woff2") format("woff2"), url("/fonts/Roboto-Italic.woff") format("woff"), url("/fonts/Roboto-Italic.ttf") format("truetype");
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-Bold.woff2") format("woff2"), url("/fonts/Roboto-Bold.woff") format("woff"), url("/fonts/Roboto-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-Bold.woff2") format("woff2"), url("/fonts/Roboto-Bold.woff") format("woff"), url("/fonts/Roboto-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-BoldItalic.woff2") format("woff2"), url("/fonts/Roboto-BoldItalic.woff") format("woff"), url("/fonts/Roboto-BoldItalic.ttf") format("truetype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("/fonts/Roboto-BoldItalic.woff2") format("woff2"), url("/fonts/Roboto-BoldItalic.woff") format("woff"), url("/fonts/Roboto-BoldItalic.ttf") format("truetype");
+    font-weight: bold;
+    font-style: italic;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+}
+
+/* Form boxes */
+.form-box {
+    background-color: #fff;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #ddd;
+    box-shadow: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 45px 15px 15px;
+    position: relative;
+}
+
+.form-box-caption {
+    color: #959595;
+    font-size: 12px;
+    font-weight: 700;
+    left: 15px;
+    letter-spacing: 1px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 15px;
+}
+
+/* Label for required fields */
+.required:after {
+    padding-left: .2em;
+    content: "*";
+    color: red;
+}
+
+/* Inline forms */
+.frm-inline {
+    display: inline-block;
+}
+
+/* Lists using icons as bullet points */
+.list-icon {
+    list-style-type: none;
+}
+
+.list-icon li  {
+    text-indent: -1.4em;
+}
+
+.list-icon li:before {
+    float: left;
+    width: 1.4em;
+}
+
+.list-glyphicon li:before {
+    font-family: 'Glyphicons Halflings', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.list-glyphicon-basic:before {
+    content: "\e008";
+}
+
+.list-glyphicon-dashboard:before {
+    content: "\e137";
+}
+
+.list-glyphicon-exercises:before {
+    content: "\e043";
+}
+
+.list-glyphicon-profile:before {
+    content: "\e065";
+}
