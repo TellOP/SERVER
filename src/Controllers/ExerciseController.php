@@ -41,30 +41,26 @@ class ExerciseController extends WebServiceClientController {
         $this->checkOAuth($appObject, 'exercises');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $this->getOAuthUsername();
-            $postBody = json_decode(file_get_contents('php://input'), TRUE);
             // Perform validation
-            if ($postBody === NULL) {
-                $this->dieWSValidation('The POST body is not valid JSON.');
-            }
-            if (!isset($postBody['id'])) {
+            if (!isset($_POST['id'])) {
                 $this->dieWSValidation('The id parameter is missing');
             }
-            if (!is_int($postBody['id'])) {
+            if (!is_int($_POST['id'])) {
                 $this->dieWSValidation('The id parameter is not an integer');
             }
-            if ($postBody['id'] < 0) {
+            if ($_POST['id'] < 0) {
                 $this->dieWSValidation('The id parameter can not be negative');
             }
-            if (!isset($postBody['type'])) {
+            if (!isset($_POST['type'])) {
                 $this->dieWSValidation('The type parameter is missing');
             }
             // TODO: add additional table types if needed
-            switch ($postBody['type']) {
+            switch ($_POST['type']) {
                 case UserActivityDictionarySearch::getJSONType():
                     // Do nothing for now
                     break;
                 case UserActivityEssay::getJSONType():
-                    if (!isset($postBody['text'])) {
+                    if (!isset($_POST['text'])) {
                         $this->dieWSValidation('The text parameter is missing');
                     }
                     break;
@@ -85,40 +81,9 @@ class ExerciseController extends WebServiceClientController {
             }
             $lockExercise->closeCursor();
 
-            // The exercise must exist and must not have already been sent
-            if (!$checkExercise = $apppdo->prepare('SELECT COUNT(*) AS num '
-                . 'FROM activity AS A '
-                . 'LEFT JOIN useractivities AS UA ON A.id = UA.activity '
-                . 'WHERE (UA.USER IS NULL OR UA.user <> :user)')) {
-                $this->unlockTables($appObject);
-                $this->dieWS(
-                    WebServiceClientController::UNABLE_TO_FETCH_DATA_FROM_DATABASE);
-            }
-            if (!$checkExercise->execute(array(':user' => $username))) {
-                $this->unlockTables($appObject);
-                $this->dieWS(
-                    WebServiceClientController::UNABLE_TO_FETCH_DATA_FROM_DATABASE);
-            }
-            if (!$exNum = $checkExercise->fetch(\PDO::FETCH_ASSOC)) {
-                $this->unlockTables($appObject);
-                $this->dieWS(
-                    WebServiceClientController::UNABLE_TO_FETCH_DATA_FROM_DATABASE);
-            }
-            $checkExercise->closeCursor();
-            if ($exNum['num'] != 0) {
-                $this->unlockTables($appObject);
-                $this->dieWS([1001, 'The exercise does not exist or has '
-                    . 'already been sent']);
-            }
-
-            // Save it
-            if (!$apppdo->beginTransaction()) {
-                $this->unlockTables($appObject);
-                $this->dieWS(
-                    WebServiceClientController::UNABLE_TO_SAVE_DATA_INTO_DATABASE);
-            }
+            // Save it (overwriting the old exercise if needed)
             // TODO: add additional tables types if needed
-            switch ($postBody['type']) {
+            switch ($_POST['type']) {
                 case UserActivityDictionarySearch::getJSONType():
                     $activity = new UserActivityDictionarySearch();
                     $activity->setUser($username);
@@ -127,7 +92,7 @@ class ExerciseController extends WebServiceClientController {
                     $activity = new UserActivityEssay();
                     $activity->setUser($username);
                     $activity->setPassed(false);
-                    $activity->setText($postBody['text']);
+                    $activity->setText($_POST['text']);
                     $activity->setTimestamp(date('Y-m-d H:i:s'));
                     break;
                 default:
@@ -135,7 +100,6 @@ class ExerciseController extends WebServiceClientController {
             }
             /** @noinspection PhpUndefinedVariableInspection */
             $activity->saveUserActivity($appObject);
-            $apppdo->commit();
 
             // Unlock tables
             $this->unlockTables($appObject);

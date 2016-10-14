@@ -146,3 +146,7 @@ body {
 .list-glyphicon-profile:before {
     content: "\e065";
 }
+
+.list-glyphicon-globe:before {
+    content: "\e135";
+}

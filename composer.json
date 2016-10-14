@@ -5,9 +5,9 @@
     "homepage": "http://www.tellop.eu/",
     "license": "Apache-2.0",
     "support": {
-        "issues": "",
-        "wiki": "",
-        "source": ""
+        "issues": "https://github.com/TellOP/SERVER/issues",
+        "wiki": "https://github.com/TellOP/SERVER/wiki",
+        "source": "https://github.com/TellOP/SERVER"
     },
     "repositories": {
         "bootstrap-validator": {
