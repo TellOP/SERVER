@@ -519,7 +519,7 @@ CREATE TABLE `activity` (
   FOREIGN KEY (`language`) REFERENCES `languages` (`LCID`) ON UPDATE CASCADE,
   FOREIGN KEY (`type`) REFERENCES `activity_type` (`id`) ON UPDATE CASCADE
 ) AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
-INSERT INTO `activity` (`id`, `type`, `level`, `language`, `featured`) VALUES (1, 'ESSAY', 'A2', 'en-us', TRUE), (2, 'ESSAY', 'A2', 'en-us', FALSE), (3, 'ESSAY', 'A2', 'en-us', FALSE), (4, 'ESSAY', 'A2', 'en-us', TRUE), (5, 'ESSAY', 'A2', 'en-us', FALSE), (6, 'ESSAY', 'A2', 'en-us', TRUE), (7, 'ESSAY', 'A2', 'en-us', TRUE), (8, 'ESSAY', 'A2', 'en-us', FALSE), (9, 'ESSAY', 'A2', 'en-us', FALSE), (10, 'ESSAY', 'A2', 'en-us', FALSE), (11, 'ESSAY', 'B2', 'en-us', FALSE), (12, 'ESSAY', 'B2', 'en-us', FALSE), (13, 'ESSAY', 'B2', 'en-us', FALSE), (14, 'ESSAY', 'B2', 'en-us', FALSE), (15, 'ESSAY', 'B2', 'en-us', FALSE), (16, 'ESSAY', 'B2', 'en-us', FALSE), (17, 'ESSAY', 'B2', 'en-us', FALSE), (18, 'ESSAY', 'B2', 'en-us', FALSE), (19, 'ESSAY', 'B2', 'en-us', FALSE), (20, 'ESSAY', 'B2', 'en-us', FALSE);
+INSERT INTO `activity` (`id`, `type`, `level`, `language`, `featured`) VALUES (1, 'ESSAY', 'A2', 'en-US', TRUE), (2, 'ESSAY', 'A2', 'en-US', FALSE), (3, 'ESSAY', 'A2', 'en-US', FALSE), (4, 'ESSAY', 'A2', 'en-US', TRUE), (5, 'ESSAY', 'A2', 'en-US', FALSE), (6, 'ESSAY', 'A2', 'en-US', TRUE), (7, 'ESSAY', 'A2', 'en-US', TRUE), (8, 'ESSAY', 'A2', 'en-US', FALSE), (9, 'ESSAY', 'A2', 'en-US', FALSE), (10, 'ESSAY', 'A2', 'en-US', FALSE), (11, 'ESSAY', 'B2', 'en-US', FALSE), (12, 'ESSAY', 'B2', 'en-US', FALSE), (13, 'ESSAY', 'B2', 'en-US', FALSE), (14, 'ESSAY', 'B2', 'en-US', FALSE), (15, 'ESSAY', 'B2', 'en-US', FALSE), (16, 'ESSAY', 'B2', 'en-US', FALSE), (17, 'ESSAY', 'B2', 'en-US', FALSE), (18, 'ESSAY', 'B2', 'en-US', FALSE), (19, 'ESSAY', 'B2', 'en-US', FALSE), (20, 'ESSAY', 'B2', 'en-US', FALSE);
 
 CREATE TABLE `activity_essay` (
   `id` INT(11) NOT NULL COMMENT 'The unique identifier of the essay activity.',
@@ -586,7 +586,7 @@ CREATE TABLE `useractivity_essay` (
   `activity` INT(11) NOT NULL COMMENT 'The activity done by the user.',
   `text` TEXT NOT NULL COMMENT 'The development of the activity.',
   `timestamp` DATETIME NOT NULL COMMENT 'The time and date the activity was submitted.',
-  `passed` BOOL NOT NULL COMMENT 'Whether the text was deemed satisfactory or not.',
+  `passed` BOOL COMMENT 'Whether the text was deemed satisfactory or not. A NULL value denotes that the exercise was not graded',
   PRIMARY KEY (`user`,`activity`),
   FOREIGN KEY (`activity`) REFERENCES `useractivities` (`activity`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`user`) REFERENCES `useractivities` (`user`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -605,7 +605,8 @@ CREATE TABLE `oauth_clients` (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
-INSERT INTO `oauth_clients` (client_id, app_name, client_secret, redirect_uri, grant_types, scope, user_id) VALUES ('1011a510829210912e6b9c63f4108e5b28fdc110e7dde792dfb1ee45524cc5c1f4a78', 'TellOP mobile app', '5c81014c10fad22f7e8d1e525e76108617f8af612c58ca8610f2b5eece6b53c8bb12', 'https://tellop.inf.um.es/oauth/2/success', 'authorization_code implicit refresh_token', 'basic dashboard exercises profile', 'admin@tellop.eu');
+-- FIXME: fill in the OAuth 2.0 client secret below
+INSERT INTO `oauth_clients` (client_id, app_name, client_secret, redirect_uri, grant_types, scope, user_id) VALUES ('1011a510829210912e6b9c63f4108e5b28fdc110e7dde792dfb1ee45524cc5c1f4a78', 'TellOP mobile app', 'FIXME', 'https://tellop.inf.um.es/oauth/2/success', 'authorization_code implicit refresh_token', 'basic dashboard exercises profile onlineresources', 'admin@tellop.eu');
 
 CREATE TABLE `oauth_access_tokens` (
     `access_token` VARCHAR(40) NOT NULL COMMENT 'System generated access token',
