@@ -19,7 +19,7 @@ include 'header.php'; include 'OAuthScopes.php'; ?>
         echo $csrftoken; ?>">
         <h1><?php echo _('Authorize application'); ?></h1>
         <p><?php /** @noinspection PhpUndefinedVariableInspection */
-            echo sprintf(_('<strong>%s</strong> would like to perform the following actions on TellOP:'), htmlspecialchars($appname)); ?></p>
+            echo sprintf(_('<strong>%s</strong> would like to perform the following actions on Tell-OP:'), htmlspecialchars($appname)); ?></p>
         <ul class="list-icon list-glyphicon">
             <?php
             /** @noinspection PhpUndefinedVariableInspection */
@@ -36,6 +36,9 @@ include 'header.php'; include 'OAuthScopes.php'; ?>
                         <?php break;
                     case 'profile': ?>
                         <li class="list-glyphicon-profile"><strong><?php echo OAUTH_SCOPE_PROFILE_TITLE; ?></strong><br><?php echo OAUTH_SCOPE_PROFILE_DESCRIPTION; ?></li>
+                        <?php break;
+                    case 'onlineresources': ?>
+                        <li class="list-glyphicon-globe"><strong><?php echo OAUTH_SCOPE_ONLINERESOURCES_TITLE; ?></strong><br><?php echo OAUTH_SCOPE_ONLINERESOURCES_DESCRIPTION; ?></li>
                         <?php break;
                 }
             }

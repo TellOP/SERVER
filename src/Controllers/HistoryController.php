@@ -28,6 +28,6 @@ class HistoryController extends WebServiceClientController {
     public function displayPage($appObject) {
         $this->checkOAuth($appObject, 'dashboard');
         echo json_encode((History::getHistoryFromDB($appObject,
-            $_SESSION['username']))->getActivityList());
+            $this->getOAuthUsername()))->getActivityList());
     }
 }

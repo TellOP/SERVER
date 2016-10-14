@@ -98,6 +98,18 @@ class UserActivityEssay extends UserActivity {
     }
 
     /**
+     * Gets a representation suitable for JSON serialization.
+     * @return mixed[] An array containing the data to be serialized.
+     */
+    public function jsonSerialize() {
+        $jsonArray = parent::jsonSerializeBase();
+        $jsonArray['text'] = $this->text;
+        $jsonArray['timestamp'] = (new \DateTime($this->timestamp))->format(\DateTime::ATOM);
+        $jsonArray['passed'] = $this->passed;
+        return $jsonArray;
+    }
+
+    /**
      * Fills in the details of a user activity from a series of fields.
      * @param mixed[] $fields The fields from which the details should be
      * loaded.

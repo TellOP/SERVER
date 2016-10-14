@@ -87,6 +87,12 @@ class TipsController extends WebServiceClientController {
             throw new DatabaseException('Unable to fetch tips details');
         }
         $tips->closeCursor();
+
+        // Force cast string IDs to numbers
+        for ($i = 0; $i < count($tipsfields); ++$i) {
+            $tipsfields[$i]['id'] = (int) $tipsfields[$i]['id'];
+        }
+
         echo json_encode($tipsfields);
     }
 }

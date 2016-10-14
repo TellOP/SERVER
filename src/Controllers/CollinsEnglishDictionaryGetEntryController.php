@@ -51,7 +51,7 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
      * @return void
      */
     public function displayPage($appObject) {
-        //$this->checkOAuth($appObject, 'onlineresources');
+        $this->checkOAuth($appObject, 'onlineresources');
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->dieWSMethodNotSupported();
         }

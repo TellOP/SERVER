@@ -7,32 +7,48 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TellOP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-21 15:16+0200\n"
+"POT-Creation-Date: 2016-10-09 21:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/Models/header.php:21
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#: src/Models/header.php:21 src/Models/header.php:39
 msgid "Toggle navigation"
 msgstr ""
 
-#: src/Models/header.php:26
+#: src/Models/header.php:26 src/Models/header.php:44
 msgid "TellOP logo"
 msgstr ""
 
-#: src/Models/header.php:32
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/header.php:32 src/Models/LoginPage.php:35
+#: src/Models/LoginPage.php:72
 msgid "Log in"
 msgstr ""
 
-#: src/Models/header.php:33
+#: src/Models/header.php:33 src/Models/LoginPage.php:80
+#: src/Models/LoginPage.php:85 src/Models/RegistrationPage.php:82
 msgid "Sign up"
 msgstr ""
 
-#: src/Models/header.php:37
+#: src/Models/header.php:37 src/Models/header.php:79
 msgid "My profile"
 msgstr ""
 
@@ -40,6 +56,681 @@ msgstr ""
 msgid "Applications"
 msgstr ""
 
-#: src/Models/header.php:40
+#: src/Models/header.php:40 src/Models/header.php:84
 msgid "Log out"
+msgstr ""
+
+#: src/Controllers/OAuth2AuthorizeController.php:69
+msgid "Unknown application"
+msgstr ""
+
+#: src/Controllers/ForgotPasswordPageController.php:33
+msgid "TellOP password recovery"
+msgstr ""
+
+#: src/Controllers/ForgotPasswordPageController.php:34
+#: src/Controllers/RegistrationPageController.php:33
+msgid "TellOP"
+msgstr ""
+
+#: src/Controllers/ForgotPasswordPageController.php:37
+#, php-format
+msgid ""
+"Hi %s,\\nsomeone has requested a password reset at TellOP.\\n\\nTo choose a "
+"new password, please click on the following link:\\n%s\\n\\nIf you did not "
+"request a password reset, simply do nothing.\\n\\nTellOP"
+msgstr ""
+
+#: src/Controllers/RegistrationPageController.php:32
+msgid "TellOP account confirmation"
+msgstr ""
+
+#: src/Controllers/RegistrationPageController.php:36
+#, php-format
+msgid ""
+"Hi %s,\\nan account was registered in your name at TellOP.\\n\\nTo confirm "
+"your e-mail address, please click on the following link:\\n%s\\n\\nIf you did "
+"not register this account, simply do nothing and it will be automatically "
+"deleted after one day.\\n\\nTellOP"
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#: src/Models/ApplicationPage.php:17 src/Models/header.php:81
+msgid "Authorized applications"
+msgstr ""
+
+#: src/Models/ApplicationPage.php:21
+msgid ""
+"An internal error occurred while trying to revoke access to the application. "
+"Please try again."
+msgstr ""
+
+#: src/Models/ApplicationPage.php:23
+msgid "The application was removed from the list."
+msgstr ""
+
+#: src/Models/ApplicationPage.php:27
+msgid ""
+"TellOP was unable to get the list of applications you authorized to access "
+"your account."
+msgstr ""
+
+#: src/Models/ApplicationPage.php:31
+msgid "You did not authorize any applications to access your account."
+msgstr ""
+
+#: src/Models/ApplicationPage.php:33
+msgid ""
+"The following applications and Web sites are authorized to access your "
+"account. Click on <strong>View permissions</strong> next to the application "
+"name to view the tasks it can perform on TellOP, or click on <strong>Revoke "
+"access</strong> to prevent it from performing such actions until you "
+"authorize it again."
+msgstr ""
+
+#: src/Models/ApplicationPage.php:58 src/Models/ApplicationPage.php:85
+#: src/Models/ApplicationPage.php:94 src/Models/header.php:96
+#: src/Models/header.php:104
+msgid "Close"
+msgstr ""
+
+#: src/Models/ApplicationPage.php:59
+#, php-format
+msgid "%s permissions"
+msgstr ""
+
+#: src/Models/ApplicationPage.php:62
+#, php-format
+msgid "<strong>%s</strong> is authorized to perform the following actions:"
+msgstr ""
+
+#: src/Models/ApplicationPage.php:95
+#, php-format
+msgid "Revoke access for %s"
+msgstr ""
+
+#: src/Models/ApplicationPage.php:98
+#, php-format
+msgid "Are you sure you want to revoke access to <strong>%s</strong>?"
+msgstr ""
+
+#: src/Models/ApplicationPage.php:99
+#, php-format
+msgid ""
+"Note that this action will <em>not</em> delete any data already stored by "
+"<strong>%s</strong>. To do so, please contact its author."
+msgstr ""
+
+#: src/Models/ApplicationPage.php:102
+msgid "Cancel"
+msgstr ""
+
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/ApplicationPage.php:108 src/Models/ApplicationPage.php:116
+msgid "Revoke access"
+msgstr ""
+
+#: src/Models/ApplicationPage.php:115
+msgid "View permissions"
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/ForgotPasswordPage.php:23 src/Models/LoginPage.php:69
+msgid "Forgot your password?"
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:26 src/Models/LoginPage.php:38
+#: src/Models/RegistrationPage.php:26
+msgid ""
+"You have performed too many login attempts. Your IP address will be unblocked "
+"three hours after the last attempt."
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:28 src/Models/LoginPage.php:40
+msgid "Your account was locked by an administrator."
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:30
+msgid ""
+"An internal error occurred while sending the verification e-mail. Please try "
+"again."
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:32
+msgid ""
+"Enter your e-mail address to get an e-mail which will allow you to reset your "
+"password."
+msgstr ""
+
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/ForgotPasswordPage.php:36 src/Models/ForgotPasswordPage.php:37
+#: src/Models/LoginPage.php:54 src/Models/LoginPage.php:55
+#: src/Models/ProfilePage.php:23 src/Models/RegistrationPage.php:36
+#: src/Models/RegistrationPage.php:37
+msgid "E-mail address"
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:37 src/Models/ForgotPasswordPage.php:38
+#: src/Models/LoginPage.php:55 src/Models/LoginPage.php:56
+#: src/Models/RegistrationPage.php:37 src/Models/RegistrationPage.php:38
+msgid "You must enter a valid e-mail address."
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:42
+msgid "Send e-mail"
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:50
+msgid "Check your e-mail"
+msgstr ""
+
+#: src/Models/ForgotPasswordPage.php:51
+msgid ""
+"We have sent you an e-mail to verify your password reset request. Please "
+"click the link contained in it to choose a new password."
+msgstr ""
+
+#: src/Models/header.php:73
+msgid "Log in/Sign up"
+msgstr ""
+
+#: src/Models/header.php:97
+msgid "Cookies are not enabled"
+msgstr ""
+
+#: src/Models/header.php:98
+msgid ""
+"Your browser does not accept cookies, which means this site might not "
+"function correctly. Please enable them and reload this page."
+msgstr ""
+
+#: src/Models/header.php:105
+msgid "JavaScript is not enabled"
+msgstr ""
+
+#: src/Models/header.php:106
+msgid ""
+"Your browser does not support JavaScript or it was turned off, which means "
+"this site might not function correctly. Please enable it and reload this page."
+msgstr ""
+
+#: src/Models/LoginPage.php:42
+msgid ""
+"You need to verify your account before logging in. Please click on the link "
+"contained in your registration e-mail."
+msgstr ""
+
+#: src/Models/LoginPage.php:44
+msgid "Incorrect username or password."
+msgstr ""
+
+#: src/Models/LoginPage.php:46
+msgid "An internal error occurred while trying to log you in. Please try again."
+msgstr ""
+
+#: src/Models/LoginPage.php:48
+msgid "Please log in to your TellOP account to continue."
+msgstr ""
+
+#: src/Models/LoginPage.php:50
+msgid "If you already have an account, log in."
+msgstr ""
+
+#: src/Models/LoginPage.php:59 src/Models/LoginPage.php:60
+#: src/Models/RegistrationPage.php:46 src/Models/RegistrationPage.php:47
+msgid "Password"
+msgstr ""
+
+#: src/Models/LoginPage.php:60 src/Models/LoginPage.php:61
+#: src/Models/RegistrationPage.php:48
+msgid "You must enter your password."
+msgstr ""
+
+#: src/Models/LoginPage.php:64
+msgid "Keep me logged in"
+msgstr ""
+
+#: src/Models/LoginPage.php:81
+msgid "If you do not have an account, please sign up to use this Web site."
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#: src/Models/MainPage.php:18
+msgid "Welcome"
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/OAuthAuthorize.php:20
+msgid "Authorize application"
+msgstr ""
+
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/OAuthAuthorize.php:22
+#, php-format
+msgid ""
+"<strong>%s</strong> would like to perform the following actions on TellOP:"
+msgstr ""
+
+#: src/Models/OAuthAuthorize.php:44
+msgid "Allow access"
+msgstr ""
+
+#: src/Models/OAuthAuthorize.php:45
+msgid "Do not allow"
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#. OAuth scope titles and descriptions
+#: src/Models/OAuthScopes.php:17
+msgid "Access basic profile data"
+msgstr ""
+
+#: src/Models/OAuthScopes.php:18
+msgid ""
+"Access basic information related to your account, such as your name, e-mail "
+"address and language level."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:20
+msgid "Authorization successful"
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:22
+msgid "Authorization unsuccessful"
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:25
+msgid ""
+"Your application is now authorized to access the TellOP API. Please wait..."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:27
+msgid "The OAuth 2.0 request is missing a required parameter."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:29
+msgid ""
+"Your application is not authorized to request an authorization code using "
+"this method."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:31
+msgid "The application is not authorized to access the TellOP server."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:33
+msgid ""
+"The authorization server can not provide an authorization code using the "
+"method requested by the application."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:35
+msgid "The requested permissions are unknown or malformed."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:37 src/Models/OAuthSuccess.php:41
+msgid "The TellOP server encountered an unexpected error."
+msgstr ""
+
+#: src/Models/OAuthSuccess.php:39
+msgid "The TellOP server is currently unable to handle the request."
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#: src/Models/PasswordResetPage.php:18
+msgid "Your password was reset successfully"
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:19
+msgid ""
+"You may now <!--suppress HtmlUnknownTarget -->\n"
+"<a href=\"/login\">log in</a> with your new password."
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:22
+msgid "Missing password reset token"
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:23
+msgid "Check the address you tried to visit is complete."
+msgstr ""
+
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/PasswordResetPage.php:30
+msgid "Choose a new password"
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:33
+msgid ""
+"An internal error occurred while trying to reset your password. Please try "
+"again."
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:35
+msgid "Choose your new password below.."
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:39 src/Models/PasswordResetPage.php:40
+#: src/Models/ProfilePage.php:49 src/Models/ProfilePage.php:50
+msgid "New password"
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:40 src/Models/PasswordResetPage.php:41
+#: src/Models/ProfilePage.php:50 src/Models/ProfilePage.php:51
+msgid "You must enter your new password."
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:44 src/Models/PasswordResetPage.php:45
+#: src/Models/ProfilePage.php:54 src/Models/ProfilePage.php:55
+msgid "Confirm new password"
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:45 src/Models/PasswordResetPage.php:46
+msgid "You must enter your new password again."
+msgstr ""
+
+#: src/Models/PasswordResetPage.php:46 src/Models/ProfilePage.php:55
+#: src/Models/ProfilePage.php:56 src/Models/RegistrationPage.php:52
+#: src/Models/RegistrationPage.php:53
+msgid "The passwords do not match."
+msgstr ""
+
+#. * @noinspection PhpUndefinedVariableInspection
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/PasswordResetPage.php:50 src/Models/ProfilePage.php:37
+#: src/Models/ProfilePage.php:60
+msgid "Change password"
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#: src/Models/ProfilePage.php:17
+msgid "User profile"
+msgstr ""
+
+#: src/Models/ProfilePage.php:20
+msgid "User"
+msgstr ""
+
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/ProfilePage.php:25 src/Models/RegistrationPage.php:66
+msgid "Language level"
+msgstr ""
+
+#: src/Models/ProfilePage.php:39
+msgid ""
+"An internal error occurred while trying to change your password. Please try "
+"again."
+msgstr ""
+
+#: src/Models/ProfilePage.php:41
+msgid "Fill in this form to change your password."
+msgstr ""
+
+#: src/Models/ProfilePage.php:44 src/Models/ProfilePage.php:45
+msgid "Current password"
+msgstr ""
+
+#: src/Models/ProfilePage.php:45 src/Models/ProfilePage.php:46
+msgid "You must enter your current password."
+msgstr ""
+
+#: src/Models/ProfilePage.php:46
+msgid "Your old password is incorrect."
+msgstr ""
+
+#: src/Models/ProfilePage.php:56
+msgid "You must confirm your password"
+msgstr ""
+
+#: src/Models/ProfilePage.php:67
+msgid "Search history"
+msgstr ""
+
+#: src/Models/ProfilePage.php:69
+msgid "Request a list of all searches"
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#. * @noinspection PhpUndefinedVariableInspection
+#: src/Models/RegistrationPage.php:23
+msgid "Register"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:28
+msgid "An account with the e-mail address you specified already exists."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:30
+msgid ""
+"An internal error occurred while sending the confirmation e-mail. Please try "
+"again."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:32
+msgid "Register to access TellOP."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:41 src/Models/RegistrationPage.php:42
+msgid "Confirm e-mail address"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:42 src/Models/RegistrationPage.php:43
+msgid "The e-mail addresses do not match."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:47
+msgid "You must enter a password."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:51 src/Models/RegistrationPage.php:52
+msgid "Confirm password"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:56 src/Models/RegistrationPage.php:57
+msgid "Title"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:57 src/Models/RegistrationPage.php:58
+msgid "The title can be at most 50 characters long."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:61 src/Models/RegistrationPage.php:62
+msgid "Name and surname"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:62
+msgid ""
+"You must enter your name and surname and it must be at most 250 characters "
+"long"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:63
+msgid ""
+"You must enter your name and surname and it must be at most 250 characters "
+"long."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:67
+msgid "You must specify a language level."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:68
+msgid "A1: breakthrough"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:69
+msgid "A2: waystage"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:70
+msgid "B1: threshold"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:71
+msgid "B2: vantage"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:72
+msgid "C1: effective operational proficiency"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:73
+msgid "C2: mastery"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:77
+msgid ""
+"By clicking on <strong>Sign up</strong>, you agree to our <!--suppress "
+"HtmlUnknownTarget -->\n"
+"<a href=\"/terms\">Terms of service</a> and to our <!--suppress "
+"HtmlUnknownTarget -->\n"
+"<a href=\"/privacy\">Privacy policy</a>."
+msgstr ""
+
+#: src/Models/RegistrationPage.php:91
+msgid "Confirm your e-mail address"
+msgstr ""
+
+#: src/Models/RegistrationPage.php:92
+msgid ""
+"We have sent you an e-mail to verify your address. Please click the link "
+"contained in it to complete the account creation process."
+msgstr ""
+
+#. Copyright © 2016 University of Murcia
+#. *
+#. * Licensed under the Apache License, Version 2.0 (the "License");
+#. * you may not use this file except in compliance with the License.
+#. * You may obtain a copy of the License at
+#. *     http://www.apache.org/licenses/LICENSE-2.0
+#. *
+#. * Unless required by applicable law or agreed to in writing, software
+#. * distributed under the License is distributed on an "AS IS" BASIS,
+#. * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#. * See the License for the specific language governing permissions and
+#. * limitations under the License.
+#.
+#: src/Models/VerifyAccountPage.php:18 src/Models/VerifyAccountPage.php:23
+msgid "Error"
+msgstr ""
+
+#: src/Models/VerifyAccountPage.php:19
+msgid ""
+"An internal error occurred while trying to verify your e-mail address. Please "
+"try again."
+msgstr ""
+
+#: src/Models/VerifyAccountPage.php:24
+msgid ""
+"Looks like the address you visited to try to verify your e-mail account is "
+"wrong. Please check it and try again."
+msgstr ""
+
+#: src/Models/VerifyAccountPage.php:28
+msgid "Your e-mail address was verified"
+msgstr ""
+
+#: src/Models/VerifyAccountPage.php:29
+msgid ""
+"Thanks for verifying your e-mail address, you may now <!--suppress "
+"HtmlUnknownTarget -->\n"
+"<a href=\"/login\">log in</a>."
 msgstr ""

@@ -26,3 +26,6 @@ define('OAUTH_SCOPE_EXERCISES_DESCRIPTION', 'Show exercises appropriate for '
 define('OAUTH_SCOPE_PROFILE_TITLE', 'Edit your profile information');
 define('OAUTH_SCOPE_PROFILE_DESCRIPTION', 'Edit your profile information'
     . ' (e-mail address, language level, password).');
+define('OAUTH_SCOPE_ONLINERESOURCES_TITLE', 'Access external online resources');
+define('OAUTH_SCOPE_ONLINERESOURCES_DESCRIPTION', 'Access external online'
+    . ' resource endpoints, such as dictionaries, via the Tell-OP server.');

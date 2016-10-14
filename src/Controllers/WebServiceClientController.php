@@ -127,11 +127,29 @@ abstract class WebServiceClientController implements IController {
     protected function checkOAuth($appObject, $scope) {
         $this->server = new OAuth2Server($appObject);
         $response = new Response();
-        if (!$this->getOAuthServer()->verifyResourceRequest(Request::createFromGlobals(), $response, $scope)) {
+        if (!$this->getOAuthServer()->verifyResourceRequest(
+            Request::createFromGlobals(),
+            $response,
+            $scope)) {
             $response->send();
             die;
         }
     }
+
+    /**
+     * Gets the username associated with the access token currently in use.
+     * @return string|null The username associated with the access token, or
+     * <c>null</c> if the token was not already checked.
+     */
+    protected function getOAuthUsername() {
+        if ($this->server === NULL) {
+            return NULL;
+        }
+        $token = $this->getOAuthServer()->getAccessTokenData(
+            Request::createFromGlobals());
+        return $token['user_id'];
+    }
+
     /**
      * Opens a cURL handle (or dies if the function was unable to do so).
      * @param string $url URL to fetch.

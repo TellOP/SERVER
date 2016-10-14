@@ -18,7 +18,7 @@ namespace TellOP\DAO;
  * An activity performed by a user.
  * @package TellOP\DAO
  */
-abstract class UserActivity implements IJSONTypable {
+abstract class UserActivity implements IJSONTypable, \JsonSerializable {
     /**
      * The user who did the activity.
      * @var string $user
@@ -86,6 +86,18 @@ abstract class UserActivity implements IJSONTypable {
                 $this->activity = $fields['activity'];
             }
         }
+    }
+
+    /**
+     * Gets a representation suitable for JSON serialization.
+     * @return mixed[] An array containing the data to be serialized.
+     */
+    public function jsonSerializeBase(){
+        $jsonArray = array();
+        $jsonArray['user'] = $this->user;
+        $jsonArray['type'] = static::getJSONType();
+        $jsonArray['activity'] = $this->activity;
+        return $jsonArray;
     }
 
     /**
@@ -196,6 +208,7 @@ abstract class UserActivity implements IJSONTypable {
                 throw new DatabaseException('Unexpected value in the user '
                     . 'activity type field');
         }
+        $activity->getActivityFromFields($useractivityfields);
         return $activity;
     }
 }

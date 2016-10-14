@@ -50,11 +50,19 @@ class ActivityEssay extends Activity {
     private $maximumwords;
 
     /**
+     * The text of the essay.
+     * @var string $text
+     */
+    private $text;
+
+    /**
      * ActivityEssay constructor.
      * @param \TellOP\Application $appObject The application object.
      */
     function __construct($appObject) {
         parent::__construct($appObject);
+        $this->title = '';
+        $this->description = '';
         $this->tags = array();
         $this->minimumwords = 80;
         $this->maximumwords = 250;
@@ -109,6 +117,15 @@ class ActivityEssay extends Activity {
     }
 
     /**
+     * Gets the text the user should read before performing the activity.
+     * @return string The text the user should read before performing the
+     * activity.
+     */
+    public function getText() {
+        return $this->text;
+    }
+
+    /**
      * Replaces the current activity with one loaded from a set of fields.
      * @param mixed[] $fields The database fields.
      */
@@ -124,11 +141,14 @@ class ActivityEssay extends Activity {
             if (isset($fields['tags']) && strlen($fields['tags']) > 0) {
                 $this->tags = explode(',', $fields['tags']);
             }
-            if (isset($fields['minimumwords'])) {
-                $this->minimumwords = $fields['minimumwords'];
+            if (isset($fields['minimumwords']) && is_numeric($fields['minimumwords'])) {
+                $this->minimumwords = (int) $fields['minimumwords'];
             }
-            if (isset($fields['maximumwords'])) {
-                $this->maximumwords = $fields['maximumwords'];
+            if (isset($fields['maximumwords']) && is_numeric($fields['maximumwords'])) {
+                $this->maximumwords = (int) $fields['maximumwords'];
+            }
+            if (isset($fields['text'])) {
+                $this->text = $fields['text'];
             }
         }
     }
@@ -144,6 +164,7 @@ class ActivityEssay extends Activity {
         $jsonArray['tags'] = $this->tags;
         $jsonArray['minimumwords'] = $this->minimumwords;
         $jsonArray['maximumwords'] = $this->maximumwords;
+        $jsonArray['text'] = $this->text;
         return $jsonArray;
     }
 }

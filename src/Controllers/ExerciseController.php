@@ -40,6 +40,7 @@ class ExerciseController extends WebServiceClientController {
     public function displayPage($appObject) {
         $this->checkOAuth($appObject, 'exercises');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = $this->getOAuthUsername();
             $postBody = json_decode(file_get_contents('php://input'), TRUE);
             // Perform validation
             if ($postBody === NULL) {
@@ -93,7 +94,7 @@ class ExerciseController extends WebServiceClientController {
                 $this->dieWS(
                     WebServiceClientController::UNABLE_TO_FETCH_DATA_FROM_DATABASE);
             }
-            if (!$checkExercise->execute(array(':user' => $_SESSION['username']))) {
+            if (!$checkExercise->execute(array(':user' => $username))) {
                 $this->unlockTables($appObject);
                 $this->dieWS(
                     WebServiceClientController::UNABLE_TO_FETCH_DATA_FROM_DATABASE);
@@ -120,11 +121,11 @@ class ExerciseController extends WebServiceClientController {
             switch ($postBody['type']) {
                 case UserActivityDictionarySearch::getJSONType():
                     $activity = new UserActivityDictionarySearch();
-                    $activity->setUser($_SESSION['username']);
+                    $activity->setUser($username);
                     break;
                 case UserActivityEssay::getJSONType():
                     $activity = new UserActivityEssay();
-                    $activity->setUser($_SESSION['username']);
+                    $activity->setUser($username);
                     $activity->setPassed(false);
                     $activity->setText($postBody['text']);
                     $activity->setTimestamp(date('Y-m-d H:i:s'));

@@ -32,9 +32,7 @@ class APIProfileController extends WebServiceClientController {
         }
         /** @noinspection PhpUndefinedVariableInspection */
         $this->checkOAuth($appObject, $requiredscope);
-        $token = $this->getOAuthServer()->getAccessTokenData(
-            Request::createFromGlobals());
-        $tokenUsername = $token['user_id'];
+        $tokenUsername = $this->getOAuthUsername();
         $apppdo = $appObject->getApplicationPDO();
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             if (($userstmt = $apppdo->prepare('SELECT email, locale, title, '

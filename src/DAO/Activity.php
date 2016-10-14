@@ -107,8 +107,8 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
      */
     protected function getActivityFromFieldsBase($fields) {
         if (isset($fields) && is_array($fields)) {
-            if (isset($fields['id'])) {
-                $this->id = $fields['id'];
+            if (isset($fields['id']) && is_numeric($fields['id'])) {
+                $this->id = (int) $fields['id'];
             }
             if (isset($fields['level'])) {
                 $this->level = $fields['level'];
@@ -116,7 +116,7 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
             if (isset($fields['language'])) {
                 $this->language = $fields['language'];
             }
-            if (isset($fields['featured'])) {
+            if (isset($fields['featured']) && is_bool($fields['featured'])) {
                 $this->featured = (bool) $fields['featured'];
             }
         }
@@ -162,7 +162,7 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
         // TODO: add additional tables here if needed
         $getActivities = $apppdo->prepare('SELECT A.id, A.type, A.level, '
             . 'A.language, A.featured, E.title, E.description, E.tags, '
-            . 'E.minimumwords, E.maximumwords FROM activity AS A '
+            . 'E.minimumwords, E.maximumwords, E.text FROM activity AS A '
             . 'LEFT JOIN activity_essay AS E ON (A.id = E.id) '
             . 'WHERE A.id = :id GROUP BY A.id');
         if (!$getActivities->execute(array('id' => $id))) {
@@ -208,7 +208,7 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
         // TODO: add additional tables here if needed
         $getFeatured = $apppdo->prepare('SELECT A.id, A.type, A.level, '
             . 'A.language, A.featured, E.title, E.description, E.tags, '
-            . 'E.minimumwords, E.maximumwords FROM activity AS A '
+            . 'E.minimumwords, E.maximumwords, E.text FROM activity AS A '
             . 'LEFT JOIN activity_essay AS E ON (A.id = E.id) '
             . 'WHERE A.featured = TRUE GROUP BY A.id');
         if (!$getFeatured->execute()) {
@@ -244,12 +244,13 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
     /**
      * Gets a list of all featured exercises not done by the current user.
      * @param \TellOP\Application $appObject The application object.
+     * @param string $username The username of the current user.
      * @return Activity[] The list of featured exercises.
      * @throws \InvalidArgumentException Thrown if a parameter is <c>null</c>
      * or empty.
      * @throws DatabaseException Thrown if a database error occurs.
      */
-    public static function getFeaturedAndNotDoneExercises($appObject) {
+    public static function getFeaturedAndNotDoneExercises($appObject, $username) {
         if ($appObject === NULL) {
             throw new \InvalidArgumentException('appObject is null');
         }
@@ -258,11 +259,11 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
         // TODO: add additional tables here if needed
         $getFeatured = $apppdo->prepare('SELECT A.id, A.type, A.level, '
             . 'A.language, A.featured, E.title, E.description, E.tags, '
-            . 'E.minimumwords, E.maximumwords, UA.user FROM activity AS A '
+            . 'E.minimumwords, E.maximumwords, E.text UA.user FROM activity AS A '
             . 'LEFT JOIN activity_essay AS E ON (A.id = E.id) '
             . 'LEFT JOIN useractivities AS UA ON (UA.activity = A.id) '
             . 'WHERE A.featured = TRUE AND UA.user != :user GROUP BY A.id');
-        if (!$getFeatured->execute(array(':user' => $_SESSION['username']))) {
+        if (!$getFeatured->execute(array(':user' => $username))) {
             throw new DatabaseException('Unable to execute the query');
         }
         if ($getFeatured->rowCount() == 0) {

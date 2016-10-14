@@ -27,6 +27,8 @@ class FeaturedNotDoneController extends WebServiceClientController {
     public function displayPage($appObject) {
         $this->checkOAuth($appObject, 'exercises');
         // FIXME Filter by language?!
-        echo json_encode(Activity::getFeaturedAndNotDoneExercises($appObject));
+        echo json_encode(Activity::getFeaturedAndNotDoneExercises(
+            $appObject,
+            $this->getOAuthUsername()));
     }
 }
