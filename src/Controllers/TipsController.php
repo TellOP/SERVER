@@ -33,11 +33,11 @@ class TipsController extends WebServiceClientController {
         /** @var int $maxNum */
         $maxNum = 10;
         if (isset($_GET['maxNum'])) {
-            if (!is_int($_GET['maxNum'])) {
+            if (!is_numeric($_GET['maxNum'])) {
                 $this->dieWSValidation('The maxNum parameter is not an '
                     . 'integer.');
             } else {
-                $maxNum = $_GET['maxNum'];
+                $maxNum = (int) $_GET['maxNum'];
                 if ($maxNum < 1) {
                     $this->dieWSValidation('The maximum number of tips must '
                         . 'be greater than zero');

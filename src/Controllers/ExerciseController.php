@@ -45,10 +45,11 @@ class ExerciseController extends WebServiceClientController {
             if (!isset($_POST['id'])) {
                 $this->dieWSValidation('The id parameter is missing');
             }
-            if (!is_int($_POST['id'])) {
+            if (!is_numeric($_POST['id'])) {
                 $this->dieWSValidation('The id parameter is not an integer');
             }
-            if ($_POST['id'] < 0) {
+            $id = (int) $_POST['id'];
+            if ($id < 0) {
                 $this->dieWSValidation('The id parameter can not be negative');
             }
             if (!isset($_POST['type'])) {
@@ -87,10 +88,12 @@ class ExerciseController extends WebServiceClientController {
                 case UserActivityDictionarySearch::getJSONType():
                     $activity = new UserActivityDictionarySearch();
                     $activity->setUser($username);
+                    $activity->setActivity($id);
                     break;
                 case UserActivityEssay::getJSONType():
                     $activity = new UserActivityEssay();
                     $activity->setUser($username);
+                    $activity->setActivity($id);
                     $activity->setPassed(false);
                     $activity->setText($_POST['text']);
                     $activity->setTimestamp(date('Y-m-d H:i:s'));

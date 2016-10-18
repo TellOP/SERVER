@@ -33,11 +33,11 @@ class RegistrationPageController {
                 ->setFrom(array($appConfig['email']['fromaddress'] => _('TellOP')))
                 // FIXME: filter the display name here if needed!
                 ->setTo(array($_POST['email'] => $_POST['displayname']))
-                ->setBody(sprintf(_('Hi %s,\nan account was registered in your '
-                    . 'name at TellOP.\n\nTo confirm your e-mail address, '
-                    . 'please click on the following link:\n%s\n\nIf you did '
-                    . 'not register this account, simply do nothing and it '
-                    . 'will be automatically deleted after one day.\n\nTellOP'),
+                ->setBody(sprintf(_("Hi %s,\nan account was registered in your "
+                    . "name at Tell-OP.\n\nTo confirm your e-mail address, "
+                    . "please click on the following link:\n%s\n\nIf you did "
+                    . "not register this account, simply do nothing and it "
+                    . "will be automatically deleted after one day.\n\nTell-OP"),
                     $_POST['displayname'], 'https://' . $_SERVER['SERVER_NAME']
                     . '/verifyaccount?token=' . $secrettoken), 'text/plain',
                     'UTF-8');

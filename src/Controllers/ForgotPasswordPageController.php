@@ -34,10 +34,10 @@ class ForgotPasswordPageController implements IController {
                 ->setFrom(array($appConfig['email']['fromaddress'] => _('TellOP')))
                 // FIXME: filter the display name here if needed!
                 ->setTo(array($_POST['email'] => $displayname))
-                ->setBody(sprintf(_('Hi %s,\nsomeone has requested a password '
-                    . 'reset at TellOP.\n\nTo choose a new password, please '
-                    . 'click on the following link:\n%s\n\nIf you did not '
-                    . 'request a password reset, simply do nothing.\n\nTellOP'),
+                ->setBody(sprintf(_("Hi %s,\nsomeone has requested a password "
+                    . "reset at Tell-OP.\n\nTo choose a new password, please "
+                    . "click on the following link:\n%s\n\nIf you did not "
+                    . "request a password reset, simply do nothing.\n\nTell-OP"),
                     $displayname, 'https://' . $_SERVER['SERVER_NAME']
                     . '/passwordreset?token=' . $secrettoken), 'text/plain',
                     'UTF-8');

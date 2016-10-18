@@ -30,7 +30,7 @@ include 'header.php'; ?>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <!--suppress HtmlUnknownTarget -->
-            <form method="post" action="/register" data-toggle="validator">
+            <form method="post" action="/profile" data-toggle="validator">
                 <input type="hidden" name="csrftoken" value="<?php /** @noinspection PhpUndefinedVariableInspection */
                 echo $csrftoken; ?>">
                 <div class="form-box">
