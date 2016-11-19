@@ -138,7 +138,8 @@ abstract class UserActivity implements IJSONTypable, \JsonSerializable {
      */
     protected function saveUserActivityDetailsBase($apppdo) {
         $basedetails = $apppdo->prepare('INSERT INTO useractivities (user, '
-            . 'activity) VALUES (:user, :activity) ON DUPLICATE KEY UPDATE');
+            . 'activity) VALUES (:user, :activity) ON DUPLICATE KEY UPDATE '
+            . 'activity=:activity');
         if (!($basedetails->execute(array(':user' => $this->user,
             ':activity' => $this->activity)))) {
             $basedetails->closeCursor();
@@ -176,7 +177,7 @@ abstract class UserActivity implements IJSONTypable, \JsonSerializable {
         // TODO: add additional tables here
         $useractivity = $apppdo->prepare('SELECT U.user, U.activity, A.type, '
             . 'E.text, E.timestamp, E.passed FROM useractivities AS U '
-            . 'JOIN activity AS A ON U.activity = A.id'
+            . 'JOIN activity AS A ON U.activity = A.id '
             . 'LEFT JOIN useractivity_essay AS E ON U.user = E.user AND '
             . 'U.activity = E.activity WHERE U.user = :user AND '
             . 'U.activity = :activity GROUP BY U.user');
@@ -208,7 +209,7 @@ abstract class UserActivity implements IJSONTypable, \JsonSerializable {
                 throw new DatabaseException('Unexpected value in the user '
                     . 'activity type field');
         }
-        $activity->getActivityFromFields($useractivityfields);
+        $activity->getUserActivityFromFields($useractivityfields);
         return $activity;
     }
 }

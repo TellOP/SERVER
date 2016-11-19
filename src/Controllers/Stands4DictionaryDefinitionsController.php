@@ -58,14 +58,59 @@ class Stands4DictionaryDefinitionsController extends WebServiceClientController 
         $entries = $domXPath->query('/results/result');
         foreach ($entries as $entry) {
             $arrayEntry = array();
+            /* Some entries in the Stands4 dictionary do not have an associated
+             * part of speech, so set the default value first */
+            $arrayEntry['partofspeech'] = 'undefined';
             foreach ($entry->childNodes as $childNode) {
                 switch ($childNode->nodeName) {
                     case 'term':
                     case 'definition':
-                    case 'partofspeech':
                     case 'example':
                         $arrayEntry[$childNode->nodeName] = $childNode->textContent;
                         break;
+                    case 'partofspeech':
+                        /* Since the Stands4 owners sometimes change the APIs,
+                         * convert the "part of speech" field to a value
+                         * suitable for the app.
+                         *
+                         * The source strings were extracted by manually
+                         * interrogating the Stands4 API endpoint, as those are
+                         * completely undocumented.
+                         * Keep "strtolower" below because the parts of speech
+                         * are sometimes written in lowercase and sometimes in
+                         * mixed case. */
+                        switch (strtolower($childNode->textContent)) {
+                            case 'adj':
+                                $arrayEntry[$childNode->nodeName] = 'adjective';
+                                break;
+                            case 'adverb':
+                                $arrayEntry[$childNode->nodeName] = 'adverb';
+                                break;
+                            case 'conjunction':
+                                $arrayEntry[$childNode->nodeName] = 'conjunction';
+                                break;
+                            case 'interjection':
+                                $arrayEntry[$childNode->nodeName] = 'interjectionOrDiscourseMarker';
+                                break;
+                            case 'noun':
+                                $arrayEntry[$childNode->nodeName] = 'commonNoun';
+                                break;
+                            case 'preposition':
+                                $arrayEntry[$childNode->nodeName] = 'preposition';
+                                break;
+                            case 'pronoun':
+                                $arrayEntry[$childNode->nodeName] = 'pronoun';
+                                break;
+                            case 'propernoun':
+                                $arrayEntry[$childNode->nodeName] = 'properNoun';
+                                break;
+                            case 'verb':
+                                $arrayEntry[$childNode->nodeName] = 'verb';
+                                break;
+                            default:
+                                $arrayEntry[$childNode->nodeName] = 'unclassified';
+                                break;
+                        }
                     default:
                         /* Ignore the field */
                         break;

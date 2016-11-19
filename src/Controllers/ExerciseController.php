@@ -16,6 +16,7 @@ namespace TellOP\Controllers;
 
 use TellOP\DAO\Activity;
 use TellOP\DAO\DatabaseException;
+use TellOP\DAO\UserActivity;
 use TellOP\DAO\UserActivityDictionarySearch;
 use TellOP\DAO\UserActivityEssay;
 
@@ -39,8 +40,8 @@ class ExerciseController extends WebServiceClientController {
      */
     public function displayPage($appObject) {
         $this->checkOAuth($appObject, 'exercises');
+        $username = $this->getOAuthUsername();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $this->getOAuthUsername();
             // Perform validation
             if (!isset($_POST['id'])) {
                 $this->dieWSValidation('The id parameter is missing');
@@ -71,8 +72,8 @@ class ExerciseController extends WebServiceClientController {
 
             $apppdo = $appObject->getApplicationPDO();
             // TODO: add additional table types if needed
-            if (!$lockExercise = $apppdo->prepare('LOCK TABLES activity, '
-                . 'useractivities, useractivity_essay WRITE')) {
+            if (!$lockExercise = $apppdo->prepare('LOCK TABLES activity WRITE, '
+                . 'useractivities WRITE, useractivity_essay WRITE')) {
                 $this->dieWS(
                     WebServiceClientController::UNABLE_TO_FETCH_DATA_FROM_DATABASE);
             }
@@ -99,12 +100,17 @@ class ExerciseController extends WebServiceClientController {
                     $activity->setTimestamp(date('Y-m-d H:i:s'));
                     break;
                 default:
+                    $this->unlockTables($appObject);
                     $this->dieWSValidation('The exercise type is invalid');
             }
             /** @noinspection PhpUndefinedVariableInspection */
-            $activity->saveUserActivity($appObject);
+            try {
+                $activity->saveUserActivity($appObject);
+            } catch (DatabaseException $e) {
+                $this->unlockTables($appObject);
+                $this->dieWS(WebServiceClientController::UNABLE_TO_SAVE_DATA_INTO_DATABASE);
+            }
 
-            // Unlock tables
             $this->unlockTables($appObject);
         } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if (!isset($_GET['id'])) {
@@ -117,9 +123,20 @@ class ExerciseController extends WebServiceClientController {
                 $this->dieWSValidation('The id parameter can not be negative');
             }
             try {
+                $activityDetails = array();
                 $requestedAct = Activity::getActivityFromID($appObject,
                     (int) $_GET['id']);
-                echo json_encode($requestedAct);
+                if ($requestedAct !== NULL) {
+                    $activityDetails = $requestedAct->jsonSerialize();
+                    // Also load the user activity if it exists.
+                    $useractivity = UserActivity::getActivityFromID($appObject,
+                        $username, (int) $_GET['id']);
+                    if ($useractivity !== NULL) {
+                        $activityDetails['userActivity'] =
+                            $useractivity->jsonSerialize();
+                    }
+                }
+                echo json_encode($activityDetails);
             } catch (DatabaseException $e) {
                 $this->dieWS([1001,
                     'Unable to get the activity from the database.']);

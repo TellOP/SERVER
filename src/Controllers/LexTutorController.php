@@ -25,7 +25,6 @@ class LexTutorController extends WebServiceClientController {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->dieWSMethodNotSupported();
         }
-        $postBody = array();
         // Perform validation
         if (!isset($_POST['text_name'])) {
             $this->dieWSValidation('The text_name parameter is missing.');
@@ -34,15 +33,15 @@ class LexTutorController extends WebServiceClientController {
             $this->dieWSValidation('The text_name parameter must not be longer '
                 . 'than 40 characters.');
         }
-        $postBody['text_name'] = $_POST['text_name'];
-        $postBody['vintage'] = 'bnc_coca';
-        $postBody['wants_sax'] = 'on';
-        $postBody['wants_edit'] = 'on';
-        $postBody['count_sentences'] = 'on';
-        $postBody['exceptions'] = '';
-        $postBody['user_recats'] = '';
-        $postBody['via'] = 'formulaire';
-        $postBody['wants_count'] = 'on';
+        $postBody = 'text_name=' . urlencode($_POST['text_name']);
+        $postBody .= '&vintage=bnc_coca';
+        $postBody .= '&wants_sax=on';
+        $postBody .= '&wants_edit=on';
+        $postBody .= '&count_sentences=on';
+        $postBody .= '&exceptions=';
+        $postBody .= '&user_recats=';
+        $postBody .= '&via=formulaire';
+        $postBody .= '&wants_count=on';
         if (!isset($_POST['text_input'])) {
             $this->dieWSValidation('The text_input parameter is missing.');
         }
@@ -50,7 +49,7 @@ class LexTutorController extends WebServiceClientController {
             $this->dieWSValidation('The text_input parameter can not be longer'
                 . ' than 400000 characters.');
         }
-        $postBody['text_input'] = $_POST['text_input'];
+        $postBody .= '&text_input=' .$_POST['text_input'];
         // Submit to the remote Web server
         $curlHandle = $this->curlOpen(
             'http://www.lextutor.ca/cgi-bin/vp/comp/output.pl');

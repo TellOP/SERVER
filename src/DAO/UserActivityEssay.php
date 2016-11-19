@@ -142,7 +142,8 @@ class UserActivityEssay extends UserActivity {
     protected function saveUserActivityDetails($apppdo) {
         $essaydetails = $apppdo->prepare('INSERT INTO useractivity_essay '
             . '(user, activity, text, timestamp, passed) VALUES (:user, '
-            . ':activity, :text, :timestamp, :passed) ON DUPLICATE KEY UPDATE');
+            . ':activity, :text, :timestamp, :passed) ON DUPLICATE KEY UPDATE '
+            . 'text=:text, timestamp=:timestamp, passed=:passed');
         if (!($essaydetails->execute(array(
             ':user' => $this->getUser(),
             ':activity' => $this->getActivity(),

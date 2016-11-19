@@ -56,6 +56,12 @@ class ActivityEssay extends Activity {
     private $text;
 
     /**
+     * The reference text.
+     * @var string $reftext
+     */
+    private $reftext;
+
+    /**
      * ActivityEssay constructor.
      * @param \TellOP\Application $appObject The application object.
      */
@@ -63,6 +69,7 @@ class ActivityEssay extends Activity {
         parent::__construct($appObject);
         $this->title = '';
         $this->description = '';
+        $this->reftext = '';
         $this->tags = array();
         $this->minimumwords = 80;
         $this->maximumwords = 250;
@@ -82,6 +89,14 @@ class ActivityEssay extends Activity {
      */
     public function getTitle() {
         return $this->title;
+    }
+
+    /**
+     * Gets the essay reference text;
+     * @return string The reference text.
+     */
+    public function getRefText() {
+        return $this->reftext;
     }
 
     /**
@@ -150,6 +165,9 @@ class ActivityEssay extends Activity {
             if (isset($fields['text'])) {
                 $this->text = $fields['text'];
             }
+            if (isset($fields['reftext'])) {
+                $this->reftext = $fields['reftext'];
+            }
         }
     }
 
@@ -165,6 +183,7 @@ class ActivityEssay extends Activity {
         $jsonArray['minimumwords'] = $this->minimumwords;
         $jsonArray['maximumwords'] = $this->maximumwords;
         $jsonArray['text'] = $this->text;
+        $jsonArray['reftext'] = $this->reftext;
         return $jsonArray;
     }
 }
