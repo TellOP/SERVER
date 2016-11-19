@@ -72,7 +72,11 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
             'accessKey: ' . $appObject->getConfig()['apikeys']['collinsDictionary']
         ));
         $response = $this->curlExec($curlHandle, $appObject);
+        $httpStatus = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
         $this->curlClose($curlHandle);
+        if ($httpStatus != 200) {
+            $this->dieWS(WebServiceClientController::ERROR_IN_CURL_RESPONSE);
+        }
         if ($response === FALSE) {
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }

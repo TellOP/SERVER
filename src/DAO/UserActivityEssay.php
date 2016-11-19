@@ -105,7 +105,11 @@ class UserActivityEssay extends UserActivity {
         $jsonArray = parent::jsonSerializeBase();
         $jsonArray['text'] = $this->text;
         $jsonArray['timestamp'] = (new \DateTime($this->timestamp))->format(\DateTime::ATOM);
-        $jsonArray['passed'] = $this->passed;
+        if ($this->passed === NULL) {
+            $jsonArray['passed'] = NULL;
+        } else {
+            $jsonArray['passed'] = (bool) $this->passed;
+        }
         return $jsonArray;
     }
 

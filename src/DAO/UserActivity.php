@@ -96,7 +96,7 @@ abstract class UserActivity implements IJSONTypable, \JsonSerializable {
         $jsonArray = array();
         $jsonArray['user'] = $this->user;
         $jsonArray['type'] = static::getJSONType();
-        $jsonArray['activity'] = $this->activity;
+        $jsonArray['activity'] = (int) $this->activity;
         return $jsonArray;
     }
 
