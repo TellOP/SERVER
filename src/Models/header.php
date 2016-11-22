@@ -19,7 +19,7 @@ $additionalincludes = array(); ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TELL-OP</title>
+    <title><?php echo _('Tell-OP'); ?></title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="/css/app.css" rel="stylesheet">
@@ -35,58 +35,62 @@ $additionalincludes = array(); ?>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only"><?php echo _('Toggle navigation'); ?></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="<?php if ($_SESSION['username'] === NULL) { ?>/<?php } else { ?>/dashboard<?php } ?>"><img alt="<?php echo _('TellOP logo'); ?>" width="20" height="20" src="/images/navbar-logo.png"></a>
+            <?php if (!isset($_SESSION['oauthlogin'])) {?>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only"><?php echo _('Toggle navigation'); ?></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            <?php } ?>
+            <a class="navbar-brand" href="<?php if (isset($_SESSION['oauthlogin'])) {?>#<?php } elseif ($_SESSION['username'] === NULL) { ?>/<?php } else { ?>/dashboard<?php } ?>"><img alt="<?php echo _('Tell-OP logo'); ?>" width="20" height="20" src="/images/navbar-logo.png"></a>
         </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php
-                    switch ($_SESSION['language']) {
-                        case 'en_US':
-                            echo 'English';
-                            break;
-                        case 'it_IT':
-                            echo 'Italiano';
-                            break;
-                        default:
-                            // Do not localize
-                            echo 'Change language';
-                            break;
-                    } ?> <span class="caret"></span></a>
-                    <ul class="dropdown-menu f16">
+        <?php if (!isset($_SESSION['oauthlogin'])) {?>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php
+                        switch ($_SESSION['language']) {
+                            case 'en_US':
+                                echo 'English';
+                                break;
+                            case 'it_IT':
+                                echo 'Italiano';
+                                break;
+                            default:
+                                // Do not localize
+                                echo 'Change language';
+                                break;
+                        } ?> <span class="caret"></span></a>
+                        <ul class="dropdown-menu f16">
+                            <li><!--suppress HtmlUnknownTarget -->
+                                <a href="/setlang?en_US"><i class="flag gb"></i> English</a></li>
+                            <li><!--suppress HtmlUnknownTarget -->
+                                <a href="/setlang?it_IT"><i class="flag it"></i> Italiano</a></li>
+                        </ul>
+                    </li>
+                    <?php if ($_SESSION['username'] === NULL) { ?>
                         <li><!--suppress HtmlUnknownTarget -->
-                            <a href="/setlang?en_US"><i class="flag gb"></i> English</a></li>
-                        <li><!--suppress HtmlUnknownTarget -->
-                            <a href="/setlang?it_IT"><i class="flag it"></i> Italiano</a></li>
-                    </ul>
-                </li>
-                <?php if ($_SESSION['username'] === NULL) { ?>
-                    <li><!--suppress HtmlUnknownTarget -->
-                        <a href="/login"><?php echo _('Log in/Sign up'); ?></a></li>
-                <?php } else { ?>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo htmlspecialchars($_SESSION['username']); ?> <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><!--suppress HtmlUnknownTarget -->
-                            <a href="/profile"><?php echo _('My profile'); ?></a></li>
-                        <li><!--suppress HtmlUnknownTarget -->
-                            <a href="/applications"><?php echo _('Authorized applications'); ?></a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><!--suppress HtmlUnknownTarget -->
-                            <a href="/logout"><?php echo _('Log out'); ?></a></li>
-                    </ul>
-                </li>
-                <?php } ?>
-            </ul>
-        </div>
+                            <a href="/login"><?php echo _('Log in/Sign up'); ?></a></li>
+                    <?php } else { ?>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo htmlspecialchars($_SESSION['username']); ?> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><!--suppress HtmlUnknownTarget -->
+                                <a href="/profile"><?php echo _('My profile'); ?></a></li>
+                            <li><!--suppress HtmlUnknownTarget -->
+                                <a href="/applications"><?php echo _('Authorized applications'); ?></a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><!--suppress HtmlUnknownTarget -->
+                                <a href="/logout"><?php echo _('Log out'); ?></a></li>
+                        </ul>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        <?php } ?>
     </div>
 </nav>
 

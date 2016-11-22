@@ -73,6 +73,13 @@ body {
     font-family: Roboto, sans-serif;
 }
 
+/* Vertically center elements in grids */
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
 /* Form boxes */
 .form-box {
     background-color: #fff;

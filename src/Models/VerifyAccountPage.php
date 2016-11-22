@@ -13,12 +13,19 @@
  * limitations under the License.
  */
 include 'header.php'; ?>
-<?php if (isset($internalerror)) {?>
+<?php if (isset($internalerror)) {
+    if (isset($tokenerror) && $tokenerror) { ?>
+    <div class="container col-md-4 col-md-offset-4">
+        <h1><?php echo _('Invalid account confirmation link'); ?></h1>
+        <p><?php echo _('The account confirmation link you followed was already used, has expired or is incomplete. Please <a href="/register">register again</a> to get a new link.'); ?></p>
+    </div>
+<?php } else { ?>
     <div class="container col-md-4 col-md-offset-4">
         <h1><?php echo _('Error'); ?></h1>
         <p><?php echo _('An internal error occurred while trying to verify your e-mail address. Please try again.'); ?></p>
     </div>
-<?php } elseif (isset($missingtoken)) { ?>
+<?php }
+} elseif (isset($missingtoken)) { ?>
     <div class="container col-md-4 col-md-offset-4">
         <h1><?php echo _('Error'); ?></h1>
         <p><?php echo _('Looks like the address you visited to try to verify your e-mail account is wrong. Please check it and try again.'); ?></p>

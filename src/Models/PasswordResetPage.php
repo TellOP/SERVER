@@ -21,6 +21,9 @@ include 'header.php'; ?>
     <?php } elseif (isset($missingtoken) && $missingtoken) { ?>
         <h1><?php echo _('Missing password reset token'); ?></h1>
         <p><?php echo _('Check the address you tried to visit is complete.'); ?></p>
+    <?php } elseif (isset($oldtoken) && $oldtoken) { ?>
+        <h1><?php echo _('Password reset link invalid/expired'); ?></h1>
+        <p><?php echo _('The password reset link you clicked on is invalid or has expired. Please <a href="/forgotpassword">request a new password reset</a> and use the link provided in the last message that will be sent to you.'); ?></p>
     <?php } else { ?>
         <!--suppress HtmlUnknownTarget -->
         <form method="post" action="/passwordreset?token=<?php echo htmlspecialchars($_GET['token']); ?>" data-toggle="validator">
@@ -32,7 +35,7 @@ include 'header.php'; ?>
                 if (isset($internalerror)) {
                     echo '<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> ' . _('An internal error occurred while trying to reset your password. Please try again.') . '</div>';
                 } else {
-                    echo '<p>'. _('Choose your new password below..') . '</p>';
+                    echo '<p>'. _('Choose your new password below.') . '</p>';
                 }
                 ?>
                 <div class="form-group<?php if (isset($newpwerr) && $newpwerr) {echo ' has-error';} ?>">
@@ -42,7 +45,7 @@ include 'header.php'; ?>
                 </div>
                 <div class="form-group<?php if ((isset($newpwcnferr) && $newpwcnferr) || (isset($pwmismatch) && $pwmismatch)) {echo ' has-error';} ?>">
                     <label for="newpasswordconfirm"><?php echo _('Confirm new password'); ?></label>
-                    <input type="password" class="form-control" name="newpasswordconfirm" id="newpasswordconfirm" placeholder="<?php echo _('Confirm new password'); ?>" data-error="<?php echo _('You must enter your new password again.'); ?>" required>
+                    <input type="password" class="form-control" name="newpasswordconfirm" id="newpasswordconfirm" placeholder="<?php echo _('Confirm new password'); ?>" data-match="#newpassword" data-error="<?php echo _('You must enter your new password again.'); ?>" required>
                     <div class="help-block with-errors"><?php if (isset($newpwcnferr) && $newpwcnferr) {echo _('You must enter your new password again.'); } elseif (isset($pwmismatch) && $pwmismatch) {echo _('The passwords do not match.'); } ?></div>
                 </div>
                 <div class="row">

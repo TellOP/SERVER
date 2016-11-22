@@ -29,7 +29,7 @@ include 'header.php'; ?>
             } elseif (isset($emailsenderror)) {
                 echo '<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> ' . _('An internal error occurred while sending the confirmation e-mail. Please try again.') . '</div>';
             } else {
-                echo '<p>'. _('Register to access TellOP.') . '</p>';
+                echo _('<p>Register to access Tell-OP.<br>If you have already registered and you did not get an e-mail asking to verify your account, simply register again to have another one sent to you.</p>');
             }
             ?>
             <div class="form-group<?php if (isset($emailerror) && $emailerror) {echo ' has-error';} ?>">
@@ -39,8 +39,8 @@ include 'header.php'; ?>
             </div>
             <div class="form-group<?php if (isset($emailconfirmerror) && $emailconfirmerror) {echo ' has-error';} ?>">
                 <label for="emailconfirm" class="required"><?php echo _('Confirm e-mail address'); ?></label>
-                <input type="email" class="form-control" id="emailconfirm" name="emailconfirm" placeholder="<?php echo _('Confirm e-mail address'); ?>" data-error="<?php echo _('The e-mail addresses do not match.'); ?>" required<?php if (isset($_POST['emailconfirm'])) {echo ' value="'.htmlspecialchars($_POST['emailconfirm']).'"';} ?> maxlength="254">
-                <div class="help-block with-errors"><?php if (isset($emailconfirmerror) && $emailconfirmerror) {echo _('The e-mail addresses do not match.'); } ?></div>
+                <input type="email" class="form-control" id="emailconfirm" name="emailconfirm" placeholder="<?php echo _('Confirm e-mail address'); ?>" data-match="#email" data-error="<?php echo _('The address you typed is not valid or the e-mail addresses do not match.'); ?>" required<?php if (isset($_POST['emailconfirm'])) {echo ' value="'.htmlspecialchars($_POST['emailconfirm']).'"';} ?> maxlength="254">
+                <div class="help-block with-errors"><?php if (isset($emailconfirmerror) && $emailconfirmerror) {echo _('The address you typed is not valid or the e-mail addresses do not match.'); } ?></div>
             </div>
             <div class="form-group<?php if (isset($missingpassword) && $missingpassword) {echo ' has-error';} ?>">
                 <label for="password" class="required"><?php echo _('Password'); ?></label>
@@ -49,7 +49,7 @@ include 'header.php'; ?>
             </div>
             <div class="form-group<?php if (isset($confirmpassworderror) && $confirmpassworderror) {echo ' has-error';} ?>">
                 <label for="passwordconfirm" class="required"><?php echo _('Confirm password'); ?></label>
-                <input type="password" class="form-control" id="passwordconfirm" name="passwordconfirm" placeholder="<?php echo _('Confirm password'); ?>" data-error="<?php echo _('The passwords do not match.'); ?>" required>
+                <input type="password" class="form-control" id="passwordconfirm" name="passwordconfirm" placeholder="<?php echo _('Confirm password'); ?>" data-match="#password" data-error="<?php echo _('The passwords do not match.'); ?>" required>
                 <div class="help-block with-errors"><?php if (isset($confirmpassworderror) && $confirmpassworderror) {echo _('The passwords do not match.'); } ?></div>
             </div>
             <div class="form-group<?php if (isset($titleerror) && $titleerror) {echo ' has-error';} ?>">
@@ -74,9 +74,11 @@ include 'header.php'; ?>
                 </select>
                 <div id="languageleveldesc"></div>
             </div>
-            <p><?php echo _('By clicking on <strong>Sign up</strong>, you agree to our <!--suppress HtmlUnknownTarget -->
-<a href="/terms">Terms of service</a> and to our <!--suppress HtmlUnknownTarget -->
-<a href="/privacy">Privacy policy</a>.'); ?></p>
+            <p><?php
+                // Translators: the "data-modal-title" attributes must be translated as well.
+                echo _('By clicking on <strong>Sign up</strong>, you agree to our <!--suppress HtmlUnknownTarget -->
+<a href="/terms" id="termsLink" data-modal-title="Terms of service" data-modal-body="/terms">Terms of service</a> and to our <!--suppress HtmlUnknownTarget -->
+<a href="/privacy" id="privacyLink" data-modal-title="Privacy policy" data-modal-body="/privacy">Privacy policy</a>.'); ?></p>
             <div class="row">
                 <div class="col-xs-12">
                     <button type="submit" class="btn btn-default pull-right"><?php echo _('Sign up'); ?></button>
@@ -84,6 +86,21 @@ include 'header.php'; ?>
             </div>
         </div>
     </form>
+    <div class="modal fade" id="termsPrivacyModal" tabindex="-1" role="dialog" aria-labelledby="termsPrivacyModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="termsPrivacyModalLabel"></h4>
+                </div>
+                <div class="modal-body" id="termsPrivacyModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo _('Close'); ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php $additionalincludes[] = '/js/registration.js'; ?>
 </div>
 <?php } else { ?>

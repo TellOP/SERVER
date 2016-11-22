@@ -44,4 +44,19 @@
     }
     $(document).ready(changeLangLevelDesc);
     $("#languagelevel").change(changeLangLevelDesc);
+
+    function openTermsOrPrivacy(event) {
+        var callingLink = $(event.currentTarget);
+        $("#termsPrivacyModalLabel").text(callingLink.data("modal-title"));
+        $("#termsPrivacyModalBody").load(callingLink.data("modal-body") + " #maincontainer", function(response, status, xhr) {
+            if (status == "error") {
+                $("#termsPrivacyModalBody").html(l("%errorloadingtermsorprivacy"));
+            }
+            $('#termsPrivacyModal').modal();
+        });
+        event.stopPropagation();
+        return false;
+    }
+    $("#termsLink").click(openTermsOrPrivacy);
+    $("#privacyLink").click(openTermsOrPrivacy);
 }());

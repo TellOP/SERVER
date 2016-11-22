@@ -45,7 +45,7 @@ include 'header.php'; ?>
                 } elseif (isset($internalerror)) {
                     echo '<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> ' . _('An internal error occurred while trying to log you in. Please try again.') . '</div>';
                 } elseif ($oauth2req) {
-                    echo '<p>'. _('Please log in to your TellOP account to continue.') . '</p>';
+                    echo '<p>'. _('Please log in to your Tell-OP account to continue.') . '</p>';
                 } else {
                     echo '<p>'. _('If you already have an account, log in.') . '</p>';
                 }
@@ -60,13 +60,18 @@ include 'header.php'; ?>
                 <input type="password" class="form-control" name="password" id="password" placeholder="<?php echo _('Password'); ?>" data-error="<?php echo _('You must enter your password.'); ?>" required>
                 <div class="help-block with-errors"><?php if (isset($missingpassword) && $missingpassword) {echo _('You must enter your password.'); } ?></div>
             </div>
-            <div class="checkbox">
-                <label><input type="checkbox" name="rememberme"<?php if (isset($rememberme) && $rememberme) {echo ' checked';} ?>> <?php echo _('Keep me logged in'); ?></label>
-            </div>
+            <?php if (!$oauth2req) {?>
+                <div class="checkbox">
+                    <label><input type="checkbox" name="rememberme"<?php if (isset($rememberme) && $rememberme) {echo ' checked';} ?>> <?php echo _('Keep me logged in'); ?></label>
+                </div>
+            <?php } ?>
             <div class="row">
                 <div class="col-xs-8">
-                    <div class="form-control-static"><!--suppress HtmlUnknownTarget -->
-                        <a href="/forgotpassword"><?php echo _('Forgot your password?'); ?></a></div>
+                    <?php if (!$oauth2req) {?>
+                        <div class="form-control-static"><!--suppress HtmlUnknownTarget -->
+                            <a href="/forgotpassword"><?php echo _('Forgot your password?'); ?></a>
+                        </div>
+                    <?php } ?>
                 </div>
                 <div class="col-xs-4">
                     <button type="submit" class="btn btn-default pull-right"><?php echo _('Log in'); ?></button>

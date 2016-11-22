@@ -18,13 +18,16 @@ class VerifyAccountController implements IController {
     /**
      * Displays an error message and rolls back any changes.
      * @param \PDO $apppdo Application PDO object.
+     * @param bool $tokenerror <c>true</c> if the error is due to a token being
+     * expired or invalid.
      */
-    private function showError($apppdo) {
+    private function showError($apppdo, $tokenerror = false) {
         $unlockstmt = $apppdo->prepare('UNLOCK TABLES');
         $apppdo->rollBack();
         $unlockstmt->execute();
         \Flight::render('VerifyAccountPage', array(
-            'internalerror' => true));
+            'internalerror' => true,
+            'tokenerror' => $tokenerror));
     }
 
     /**
@@ -60,7 +63,7 @@ class VerifyAccountController implements IController {
             return;
         }
         if ($checkusernum->rowCount() != 1) {
-            $this->showError($apppdo);
+            $this->showError($apppdo, true);
             return;
         }
         if (($useremail = $checkusernum->fetch(\PDO::FETCH_ASSOC)) === FALSE) {

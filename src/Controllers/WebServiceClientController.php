@@ -74,7 +74,7 @@ abstract class WebServiceClientController implements IController {
         [9, 'A required server-side API key is missing'];
 
     /**
-     * OAuth 2.0 server as provided by TellOP.
+     * OAuth 2.0 server as provided by Tell-OP.
      * @var OAuth2Server $server
      */
     private $server;

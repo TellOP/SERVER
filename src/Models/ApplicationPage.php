@@ -24,7 +24,7 @@ include 'header.php'; include 'OAuthScopes.php'; ?>
         }
     }
     if (isset($unabletoretrievelist) && $unabletoretrievelist) {
-        echo '<p>' . _('TellOP was unable to get the list of applications you authorized to access your account.') . '</p>';
+        echo '<p>' . _('Tell-OP was unable to get the list of applications you authorized to access your account.') . '</p>';
     } else {
         /** @noinspection PhpUndefinedVariableInspection */
         if (count($userapps) == 0) {
@@ -33,7 +33,7 @@ include 'header.php'; include 'OAuthScopes.php'; ?>
             echo '<p>' . _('The following applications and Web sites are authorized'
                     . ' to access your account. Click on <strong>View permissions</strong>'
                     . ' next to the application name to view the tasks it can perform'
-                    . ' on TellOP, or click on <strong>Revoke access</strong> to prevent'
+                    . ' on Tell-OP, or click on <strong>Revoke access</strong> to prevent'
                     . ' it from performing such actions until you authorize it again.')
                 . '</p>';
             ?>
@@ -56,10 +56,10 @@ include 'header.php'; include 'OAuthScopes.php'; ?>
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="<?php echo _('Close'); ?>"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="permissionslabel-<?php echo $app['client_id']; ?>"><?php echo sprintf(_('%s permissions'), htmlspecialchars($app['displayname'])); ?></h4>
+                                    <h4 class="modal-title" id="permissionslabel-<?php echo $app['client_id']; ?>"><?php echo sprintf(_('%s permissions'), htmlspecialchars($app['app_name'])); ?></h4>
                                 </div>
                                 <div class="modal-body">
-                                    <p><?php echo sprintf(_('<strong>%s</strong> is authorized to perform the following actions:'), htmlspecialchars($app['displayname'])); ?></p>
+                                    <p><?php echo sprintf(_('<strong>%s</strong> is authorized to perform the following actions:'), htmlspecialchars($app['app_name'])); ?></p>
                                     <ul class="list-icon list-glyphicon">
                                         <?php
                                         foreach (explode(' ', $app['scope']) as $scope) {
@@ -92,11 +92,11 @@ include 'header.php'; include 'OAuthScopes.php'; ?>
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="<?php echo _('Close'); ?>"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="revokelabel-<?php echo $app['client_id']; ?>"><?php echo sprintf(_('Revoke access for %s'), htmlspecialchars($app['displayname'])); ?></h4>
+                                    <h4 class="modal-title" id="revokelabel-<?php echo $app['client_id']; ?>"><?php echo sprintf(_('Revoke access for %s'), htmlspecialchars($app['app_name'])); ?></h4>
                                 </div>
                                 <div class="modal-body">
-                                    <p><?php echo sprintf(_('Are you sure you want to revoke access to <strong>%s</strong>?'), htmlspecialchars($app['displayname'])); ?></p>
-                                    <p><?php echo sprintf(_('Note that this action will <em>not</em> delete any data already stored by <strong>%s</strong>. To do so, please contact its author.'), htmlspecialchars($app['displayname'])); ?></p>
+                                    <p><?php echo sprintf(_('Are you sure you want to revoke access to <strong>%s</strong>?'), htmlspecialchars($app['app_name'])); ?></p>
+                                    <p><?php echo sprintf(_('Note that this action will <em>not</em> delete any data already stored by <strong>%s</strong>. To do so, please contact its author.'), htmlspecialchars($app['app_name'])); ?></p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _('Cancel'); ?></button>

@@ -22,23 +22,23 @@ include 'header.php'; ?>
             echo _('Authorization unsuccessful');
         } ?></h1>
     <p><?php if (!isset($errorMessage)) {
-            echo _('Your application is now authorized to access the TellOP API. Please wait...');
+            echo _('Your application is now authorized to access the Tell-OP API. Please wait...');
         } elseif ($errorMessage === 'invalid_request') {
             echo _('The OAuth 2.0 request is missing a required parameter.');
         } elseif ($errorMessage === 'unauthorized_client') {
             echo _('Your application is not authorized to request an authorization code using this method.');
         } elseif ($errorMessage === 'access_denied') {
-            echo _('The application is not authorized to access the TellOP server.');
+            echo _('The application is not authorized to access the Tell-OP server.');
         } elseif ($errorMessage === 'unsupported_response_type') {
             echo _('The authorization server can not provide an authorization code using the method requested by the application.');
         } elseif ($errorMessage === 'invalid_scope') {
             echo _('The requested permissions are unknown or malformed.');
         } elseif ($errorMessage === 'server_error') {
-            echo _('The TellOP server encountered an unexpected error.');
+            echo _('The Tell-OP server encountered an unexpected error.');
         } elseif ($errorMessage === 'temporarily_unavailable') {
-            echo _('The TellOP server is currently unable to handle the request.');
+            echo _('The Tell-OP server is currently unable to handle the request.');
         } else {
-            echo _('The TellOP server encountered an unexpected error.');
+            echo _('The Tell-OP server encountered an unexpected error.');
         } ?></p>
 </div>
 <?php include 'footer.php'; ?>

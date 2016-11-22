@@ -13,8 +13,9 @@
  * limitations under the License.
  */
 include 'header.php'; ?>
-<div class="container">
-<h1>TellOP Terms and Conditions</h1>
+<div class="container" id="maincontainer">
+<h1><?php echo _('Tell-OP terms and conditions'); ?></h1>
+<p><?php echo _('The Tell-OP terms and conditions are published only in English.'); ?></p>
 <!-- FIXME -->
 <p>The terms and conditions go here.</p>
 </div>

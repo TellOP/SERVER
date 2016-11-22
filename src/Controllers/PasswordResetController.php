@@ -64,8 +64,17 @@ class PasswordResetController implements IController {
             $this->showError($appObject);
             return;
         }
-        if ($checkusernum->rowCount() != 1) {
+        if ($checkusernum->rowCount() > 1) {
             $this->showError($appObject);
+            return;
+        } elseif ($checkusernum->rowCount() == 0) {
+            $unlockstmt = $apppdo->prepare('UNLOCK TABLES');
+            $apppdo->rollBack();
+            $unlockstmt->execute();
+            $unlockstmt->closeCursor();
+            \Flight::render('PasswordResetPage', array(
+                'csrftoken' => $appObject->getCSRFToken(),
+                'oldtoken' => true));
             return;
         }
         if (($useremail = $checkusernum->fetch(\PDO::FETCH_ASSOC)) === FALSE) {
@@ -92,8 +101,9 @@ class PasswordResetController implements IController {
                 ));
                 return;
             }
-            $upduser = $apppdo->prepare('UPDATE users SET password = ? '
-                . 'WHERE email = ?');
+            $upduser = $apppdo->prepare('UPDATE users SET password = ?, '
+                . 'accountstatus = 1, secrettoken = NULL, '
+                . 'secrettokenexpire = NULL WHERE email = ?');
             if (!$upduser->execute(array(password_hash($_POST['newpassword'],
                 PASSWORD_DEFAULT), $_SESSION['username']))) {
                 $this->showError($appObject);

@@ -134,7 +134,7 @@ class ProfilePageController implements IController {
             $newpw = $apppdo->prepare('UPDATE users SET password = ? WHERE '
                 . 'email = ?');
             if (!$newpw->execute(array(password_hash($_POST['newpassword'],
-                PASSWORD_DEFAULT)))) {
+                PASSWORD_DEFAULT), $_SESSION['username']))) {
                 $this->showError($appObject, $userrec);
                 return;
             }
@@ -146,6 +146,14 @@ class ProfilePageController implements IController {
                 $this->showError($appObject, $userrec);
                 return;
             }
+            \Flight::render('ProfilePage', array(
+                'csrftoken' => $appObject->getCSRFToken(),
+                'title' => $userrec['title'],
+                'displayname' => $userrec['displayname'],
+                'emailaddress' => $_SESSION['username'],
+                'languagelevel' => $userrec['languagelevel'],
+                'passwordchanged' => true
+            ));
         } else {
             \Flight::render('ProfilePage', array(
                 'csrftoken' => $appObject->getCSRFToken(),

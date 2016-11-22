@@ -213,10 +213,8 @@ class Application {
         }
 
         // Output security headers.
-        // Assume all resources are loaded only from the same domain and that
-        // no frames, objects or interactive media are used.
-        header('Content-Security-Policy: default-src \'self\'; object-src'
-            . ' \'none\'; media-src \'none\'; child-src \'none\'');
+        // Assume all resources are loaded only from the same domain.
+        header('Content-Security-Policy: default-src \'self\'; img-src \'self\' play.google.com');
         header('X-Content-Type-Options: nosniff');
         header('X-Frame-Options: DENY');
         header('X-XSS-Protection: 1; mode=block');

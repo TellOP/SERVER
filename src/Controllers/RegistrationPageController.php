@@ -49,7 +49,6 @@ class RegistrationPageController {
                 $mailtransport->setEncryption($appConfig['email']['encryption']);
             }
             $mailer = \Swift_Mailer::newInstance($mailtransport);
-            // TODO: check
             $mailer->send($message);
             \Flight::render('RegistrationPage', array(
                 'csrftoken' => $appObject->getCSRFToken(),
@@ -72,6 +71,7 @@ class RegistrationPageController {
             $emailerror = (!isset($_POST['email'])) || (filter_var($_POST['email'],
                 FILTER_VALIDATE_EMAIL) === FALSE);
             $emailconfirmerror = (!isset($_POST['emailconfirm'])) ||
+                (filter_var($_POST['emailconfirm'], FILTER_VALIDATE_EMAIL) === FALSE) ||
                 ($_POST['email'] != $_POST['emailconfirm']);
             $missingpassword = (!isset($_POST['password'])) ||
                 ($_POST['password'] == '');
@@ -133,7 +133,7 @@ class RegistrationPageController {
                 // registered and waiting for confirmation.
                 if ($checkemailstmt->rowCount() == 1) {
                     $checkemailrcrd = $checkemailstmt->fetch(\PDO::FETCH_ASSOC);
-                    if ($checkemailrcrd['accountstatus'] === 0) {
+                    if ((int) $checkemailrcrd['accountstatus'] === 0) {
                         $secrettoken = $appObject->generateToken();
                         $gettokenstmt = $apppdo->prepare('UPDATE users SET '
                             . 'secrettoken = ?, secrettokenexpire = NOW() + '

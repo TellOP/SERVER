@@ -30,14 +30,15 @@ class ForgotPasswordPageController implements IController {
         $appConfig = $appObject->getConfig();
         try {
             $message = \Swift_Message::newInstance()
-                ->setSubject(_('TellOP password recovery'))
-                ->setFrom(array($appConfig['email']['fromaddress'] => _('TellOP')))
+                ->setSubject(_('Tell-OP password recovery'))
+                ->setFrom(array($appConfig['email']['fromaddress'] => _('Tell-OP')))
                 // FIXME: filter the display name here if needed!
                 ->setTo(array($_POST['email'] => $displayname))
                 ->setBody(sprintf(_("Hi %s,\nsomeone has requested a password "
                     . "reset at Tell-OP.\n\nTo choose a new password, please "
-                    . "click on the following link:\n%s\n\nIf you did not "
-                    . "request a password reset, simply do nothing.\n\nTell-OP"),
+                    . "click on the following link:\n%s\n\nThis link will "
+                    . "expire in twenty minutes.\n\nIf you did not request a "
+                    . "password reset, simply do nothing.\n\nTell-OP"),
                     $displayname, 'https://' . $_SERVER['SERVER_NAME']
                     . '/passwordreset?token=' . $secrettoken), 'text/plain',
                     'UTF-8');
@@ -49,7 +50,6 @@ class ForgotPasswordPageController implements IController {
                 $mailtransport->setEncryption($appConfig['email']['encryption']);
             }
             $mailer = \Swift_Mailer::newInstance($mailtransport);
-            // TODO: check
             $mailer->send($message);
             \Flight::render('ForgotPasswordPage', array(
                 'csrftoken' => $appObject->getCSRFToken(),
@@ -114,20 +114,15 @@ class ForgotPasswordPageController implements IController {
                     'emailaddress' => $_POST['email']));
                 return;
             }
-            switch ($credentialsstmt->rowCount()) {
-                case 1:
-                    $userrecord = $credentialsstmt->fetch(\PDO::FETCH_ASSOC);
-                    $userdisplayname = $userrecord['displayname'];
-                    break;
-                default:
-                    $updateblockstmt = $apppdo->prepare('UPDATE ipblock SET '
-                        . 'tries = tries + 1 WHERE ip = ?');
-                    $updateblockstmt->execute(array($_SERVER['REMOTE_ADDR']));
-                    \Flight::render('ForgotPasswordPage', array(
-                        'csrftoken' => $appObject->getCSRFToken(),
-                        'wrongcredentials' => true,
-                        'emailaddress' => $_POST['email']));
-                    return;
+            if ($credentialsstmt->rowCount() != 1) {
+                $updateblockstmt = $apppdo->prepare('UPDATE ipblock SET '
+                    . 'tries = tries + 1 WHERE ip = ?');
+                $updateblockstmt->execute(array($_SERVER['REMOTE_ADDR']));
+                \Flight::render('ForgotPasswordPage', array(
+                    'csrftoken' => $appObject->getCSRFToken(),
+                    'wrongcredentials' => true,
+                    'emailaddress' => $_POST['email']));
+                return;
             }
             $credentials = $credentialsstmt->fetch(\PDO::FETCH_ASSOC);
             // Check account status
@@ -146,12 +141,12 @@ class ForgotPasswordPageController implements IController {
                     $secrettoken = $appObject->generateToken();
                     $secrettokenstmt = $apppdo->prepare('UPDATE users SET '
                         . 'secrettoken = ?, secrettokenexpire = NOW() + '
-                        . 'INTERVAL 10 MINUTE, accountstatus = 4 WHERE '
+                        . 'INTERVAL 20 MINUTE, accountstatus = 4 WHERE '
                         . 'email = ?');
                     $secrettokenstmt->execute(array($secrettoken,
                         $_POST['email']));
                     $this->sendConfirmation($appObject, $secrettoken,
-                        $userdisplayname);
+                        $credentials['displayname']);
                     return;
                 case 2: /* Account locked */
                     \Flight::render('ForgotPasswordPage', array(

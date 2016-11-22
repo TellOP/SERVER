@@ -11,7 +11,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 --
--- SQL schema for the TellOP Web application
+-- SQL schema for the Tell-OP Web application
 DROP TABLE IF EXISTS `oauth_scopes`;
 DROP TABLE IF EXISTS `oauth_refresh_tokens`;
 DROP TABLE IF EXISTS `oauth_jwt`;
