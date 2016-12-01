@@ -59,7 +59,12 @@ class ExerciseController extends WebServiceClientController {
             // TODO: add additional table types if needed
             switch ($_POST['type']) {
                 case UserActivityDictionarySearch::getJSONType():
-                    // Do nothing for now
+                    if (!isset($_POST['word'])) {
+                        $this->dieWSValidation('The word parameter is missing');
+                    }
+                    if (strlen($_POST['word']) > 200) {
+                        $this->dieWSValidation('The word parameter is longer than 200 characters');
+                    }
                     break;
                 case UserActivityEssay::getJSONType():
                     if (!isset($_POST['text'])) {
@@ -73,7 +78,8 @@ class ExerciseController extends WebServiceClientController {
             $apppdo = $appObject->getApplicationPDO();
             // TODO: add additional table types if needed
             if (!$lockExercise = $apppdo->prepare('LOCK TABLES activity WRITE, '
-                . 'useractivities WRITE, useractivity_essay WRITE')) {
+                . 'useractivities WRITE, useractivity_essay WRITE, '
+                . 'useractivity_dictionarysearch WRITE')) {
                 $this->dieWS(
                     WebServiceClientController::UNABLE_TO_FETCH_DATA_FROM_DATABASE);
             }
@@ -90,6 +96,8 @@ class ExerciseController extends WebServiceClientController {
                     $activity = new UserActivityDictionarySearch();
                     $activity->setUser($username);
                     $activity->setActivity($id);
+                    $activity->setWord($_POST['word']);
+                    $activity->setTimestamp(date('Y-m-d H:i:s'));
                     break;
                 case UserActivityEssay::getJSONType():
                     $activity = new UserActivityEssay();

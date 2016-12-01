@@ -66,9 +66,5 @@ include 'header.php'; ?>
             </form>
         </div>
     </div>
-    <h2><?php echo _('Search history'); ?></h2>
-    <div id="searchhistory">
-        <a href="#" id="searchhistoryreqlink"><?php echo _('Request a list of all searches'); ?></a>
-    </div>
 </div>
 <?php include 'footer.php'; ?>

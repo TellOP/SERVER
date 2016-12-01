@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `oauth_jti`;
 DROP TABLE IF EXISTS `oauth_authorization_codes`;
 DROP TABLE IF EXISTS `oauth_access_tokens`;
 DROP TABLE IF EXISTS `oauth_clients`;
+DROP TABLE IF EXISTS `useractivity_dictionarysearch`;
 DROP TABLE IF EXISTS `useractivity_essay`;
 DROP TABLE IF EXISTS `useractivities`;
 DROP TABLE IF EXISTS `activity_essay`;
@@ -54,19 +55,19 @@ CREATE TABLE `ipblock` (
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE `languages` (
-  `LCID` VARCHAR(5) NOT NULL COMMENT 'The ISO 639-1 code of the language.',
-  `locale` VARCHAR(100) NOT NULL COMMENT 'The human readable name of the language.',
-  PRIMARY KEY (`LCID`)
+    `LCID` VARCHAR(5) NOT NULL COMMENT 'The ISO 639-1 code of the language.',
+    `locale` VARCHAR(100) NOT NULL COMMENT 'The human readable name of the language.',
+    PRIMARY KEY (`LCID`)
 ) DEFAULT CHARSET=utf8;
 INSERT INTO `languages` (`LCID`, `locale`) VALUES ('de-DE', 'German - Germany'), ('en-GB', 'English - Great Britain'), ('en-US', 'English - United States'), ('es-ES', 'Spanish - Spain'), ('fr-FR', 'French - France'), ('it-IT', 'Italian - Italy');
 
 CREATE TABLE `tips` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'The unique ID of the tip.',
-  `LCID` VARCHAR(5) NOT NULL COMMENT 'The ISO 639-1 code of the language the tip applies to.',
-  `languagelevel` ENUM('A1', 'A2', 'B1', 'B2', 'C1', 'C2') NOT NULL DEFAULT 'B1' COMMENT 'The language level the tip applies to.',
-  `text` TEXT NOT NULL COMMENT 'The text of the tip.',
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`LCID`) REFERENCES `languages` (`LCID`) ON UPDATE CASCADE
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'The unique ID of the tip.',
+    `LCID` VARCHAR(5) NOT NULL COMMENT 'The ISO 639-1 code of the language the tip applies to.',
+    `languagelevel` ENUM('A1', 'A2', 'B1', 'B2', 'C1', 'C2') NOT NULL DEFAULT 'B1' COMMENT 'The language level the tip applies to.',
+    `text` TEXT NOT NULL COMMENT 'The text of the tip.',
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`LCID`) REFERENCES `languages` (`LCID`) ON UPDATE CASCADE
 ) DEFAULT CHARSET=utf8;
 INSERT INTO `tips` (`id`, `LCID`, `languagelevel`, `text`) VALUES
 (1, 'de-DE', 'A1', 'Students can learn 2000 words in five years of study (Barnard, 1971). You can learn a much wider range of words if you pay attention to how words combine. (Cobb, T. From concord to lexicon: Development and test of a corpus-based lexical tutor. Montreal: Concordia University, PhD dissertation.)'),
@@ -503,34 +504,35 @@ INSERT INTO `tips` (`id`, `LCID`, `languagelevel`, `text`) VALUES
 (432, 'it-IT', 'C2', 'The most frequent 16000 word families cover 97% of the lexicon of English (as modelled by the Brown Corpus of English).');
 
 CREATE TABLE `activity_type` (
-  `id` VARCHAR(50) NOT NULL COMMENT 'The activity type ID.',
-  `description` VARCHAR(254) DEFAULT NULL COMMENT 'A concise description of the activity.',
-  PRIMARY KEY (`id`)
+    `id` VARCHAR(50) NOT NULL COMMENT 'The activity type ID.',
+    `description` VARCHAR(254) DEFAULT NULL COMMENT 'A concise description of the activity.',
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
 INSERT INTO `activity_type` (`id`, `description`) VALUES ('DICT_SEARCH', 'The user performs a dictionary search.'), ('ESSAY', 'The user writes an essay.');
 
 CREATE TABLE `activity` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'The unique identifier of the activity.',
-  `type` VARCHAR(50) NOT NULL COMMENT 'The activity type.',
-  `level` ENUM('A1', 'A2', 'B1', 'B2', 'C1', 'C2') NOT NULL COMMENT 'The CEFR language level associated to the activity.',
-  `language` VARCHAR(5) NOT NULL COMMENT 'The language of the activity.',
-  `featured` BOOL NOT NULL COMMENT 'Whether this exercise is a featured one.',
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`language`) REFERENCES `languages` (`LCID`) ON UPDATE CASCADE,
-  FOREIGN KEY (`type`) REFERENCES `activity_type` (`id`) ON UPDATE CASCADE
-) AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
-INSERT INTO `activity` (`id`, `type`, `level`, `language`, `featured`) VALUES (1, 'ESSAY', 'A2', 'en-US', TRUE), (2, 'ESSAY', 'A2', 'en-US', FALSE), (3, 'ESSAY', 'A2', 'en-US', FALSE), (4, 'ESSAY', 'A2', 'en-US', TRUE), (5, 'ESSAY', 'A2', 'en-US', FALSE), (6, 'ESSAY', 'A2', 'en-US', TRUE), (7, 'ESSAY', 'A2', 'en-US', TRUE), (8, 'ESSAY', 'A2', 'en-US', FALSE), (9, 'ESSAY', 'A2', 'en-US', FALSE), (10, 'ESSAY', 'A2', 'en-US', FALSE), (11, 'ESSAY', 'B2', 'en-US', FALSE), (12, 'ESSAY', 'B2', 'en-US', FALSE), (13, 'ESSAY', 'B2', 'en-US', FALSE), (14, 'ESSAY', 'B2', 'en-US', FALSE), (15, 'ESSAY', 'B2', 'en-US', FALSE), (16, 'ESSAY', 'B2', 'en-US', FALSE), (17, 'ESSAY', 'B2', 'en-US', FALSE), (18, 'ESSAY', 'B2', 'en-US', FALSE), (19, 'ESSAY', 'B2', 'en-US', FALSE), (20, 'ESSAY', 'B2', 'en-US', FALSE);
+    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'The unique identifier of the activity.',
+    `type` VARCHAR(50) NOT NULL COMMENT 'The activity type.',
+    `level` ENUM('A1', 'A2', 'B1', 'B2', 'C1', 'C2') NOT NULL COMMENT 'The CEFR language level associated to the activity.',
+    `language` VARCHAR(5) NOT NULL COMMENT 'The language of the activity.',
+    `featured` BOOL NOT NULL COMMENT 'Whether this exercise is a featured one.',
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`language`) REFERENCES `languages` (`LCID`) ON UPDATE CASCADE,
+    FOREIGN KEY (`type`) REFERENCES `activity_type` (`id`) ON UPDATE CASCADE
+) AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+-- Remark: the dictionary search IDs must be hardcoded.
+INSERT INTO `activity` (`id`, `type`, `level`, `language`, `featured`) VALUES (1, 'ESSAY', 'A2', 'en-US', TRUE), (2, 'ESSAY', 'A2', 'en-US', FALSE), (3, 'ESSAY', 'A2', 'en-US', FALSE), (4, 'ESSAY', 'A2', 'en-US', TRUE), (5, 'ESSAY', 'A2', 'en-US', FALSE), (6, 'ESSAY', 'A2', 'en-US', TRUE), (7, 'ESSAY', 'A2', 'en-US', TRUE), (8, 'ESSAY', 'A2', 'en-US', FALSE), (9, 'ESSAY', 'A2', 'en-US', FALSE), (10, 'ESSAY', 'A2', 'en-US', FALSE), (11, 'ESSAY', 'B2', 'en-US', FALSE), (12, 'ESSAY', 'B2', 'en-US', FALSE), (13, 'ESSAY', 'B2', 'en-US', FALSE), (14, 'ESSAY', 'B2', 'en-US', FALSE), (15, 'ESSAY', 'B2', 'en-US', FALSE), (16, 'ESSAY', 'B2', 'en-US', FALSE), (17, 'ESSAY', 'B2', 'en-US', FALSE), (18, 'ESSAY', 'B2', 'en-US', FALSE), (19, 'ESSAY', 'B2', 'en-US', FALSE), (20, 'ESSAY', 'B2', 'en-US', FALSE), (21, 'DICT_SEARCH', 'A1', 'en-US', FALSE);
 
 CREATE TABLE `activity_essay` (
-  `id` INT(11) NOT NULL COMMENT 'The unique identifier of the essay activity.',
-  `title` VARCHAR(50) NOT NULL COMMENT 'The essay title.',
-  `description` VARCHAR(500) NOT NULL COMMENT 'A description of the task.',
-  `tags` VARCHAR(254) NOT NULL COMMENT 'A comma-separated list of tags associated to the activity.',
-  `minimumwords` INT(11) NOT NULL DEFAULT '80' COMMENT 'The minimum number of words required for the essay.',
-  `maximumwords` INT(11) NOT NULL DEFAULT '250' COMMENT 'The maximum number of words allowed for the essay.',
-  `text` TEXT COMMENT 'The text the user should read before performing the activity.',
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`id`) REFERENCES `activity` (`id`) ON UPDATE CASCADE
+    `id` INT(11) NOT NULL COMMENT 'The unique identifier of the essay activity.',
+    `title` VARCHAR(50) NOT NULL COMMENT 'The essay title.',
+    `description` VARCHAR(500) NOT NULL COMMENT 'A description of the task.',
+    `tags` VARCHAR(254) NOT NULL COMMENT 'A comma-separated list of tags associated to the activity.',
+    `minimumwords` INT(11) NOT NULL DEFAULT '80' COMMENT 'The minimum number of words required for the essay.',
+    `maximumwords` INT(11) NOT NULL DEFAULT '250' COMMENT 'The maximum number of words allowed for the essay.',
+    `text` TEXT COMMENT 'The text the user should read before performing the activity.',
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`id`) REFERENCES `activity` (`id`) ON UPDATE CASCADE
 ) DEFAULT CHARSET=utf8;
 INSERT INTO `activity_essay` (`id`, `title`, `description`, `tags`, `minimumwords`, `maximumwords`, `text`) VALUES
 (1, 'A New Friend', 'Write a short e-mail to your family telling them about your new friend. Describe him/her.', '', 80, 150, NULL),
@@ -574,22 +576,32 @@ We encourage our fellow residents to voice their objections in the meeting. Some
 (20, 'Informal Communication I', 'During a dinner with your family, you have a debate with your brother/sister about whether modern films are better or worse than classic movies. Write down the conversation explaining both points.', 'Natural language,Detailed exposition of different points of view,Advanced reasoning,Using details to support one''s argument', 180, 220, NULL);
 
 CREATE TABLE `useractivities` (
-  `user` VARCHAR(254) NOT NULL COMMENT 'The user who did the activity.',
-  `activity` INT(11) NOT NULL COMMENT 'The activity done by the user.',
-  PRIMARY KEY (`user`,`activity`),
-  FOREIGN KEY (`activity`) REFERENCES `activity` (`id`) ON UPDATE CASCADE,
-  FOREIGN KEY (`user`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
+    `user` VARCHAR(254) NOT NULL COMMENT 'The user who did the activity.',
+    `activity` INT(11) NOT NULL COMMENT 'The activity done by the user.',
+    PRIMARY KEY (`user`,`activity`),
+    FOREIGN KEY (`activity`) REFERENCES `activity` (`id`) ON UPDATE CASCADE,
+    FOREIGN KEY (`user`) REFERENCES `users` (`email`) ON DELETE CASCADE ON UPDATE CASCADE
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE `useractivity_essay` (
-  `user` VARCHAR(254) NOT NULL COMMENT 'The user who did the activity.',
-  `activity` INT(11) NOT NULL COMMENT 'The activity done by the user.',
-  `text` TEXT NOT NULL COMMENT 'The development of the activity.',
-  `timestamp` DATETIME NOT NULL COMMENT 'The time and date the activity was submitted.',
-  `passed` BOOL COMMENT 'Whether the text was deemed satisfactory or not. A NULL value denotes that the exercise was not graded',
-  PRIMARY KEY (`user`,`activity`),
-  FOREIGN KEY (`activity`) REFERENCES `useractivities` (`activity`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`user`) REFERENCES `useractivities` (`user`) ON DELETE CASCADE ON UPDATE CASCADE
+    `user` VARCHAR(254) NOT NULL COMMENT 'The user who did the activity.',
+    `activity` INT(11) NOT NULL COMMENT 'The activity done by the user.',
+    `text` TEXT NOT NULL COMMENT 'The development of the activity.',
+    `timestamp` DATETIME NOT NULL COMMENT 'The time and date the activity was submitted.',
+    `passed` BOOL COMMENT 'Whether the text was deemed satisfactory or not. A NULL value denotes that the exercise was not graded',
+    PRIMARY KEY (`user`,`activity`),
+    FOREIGN KEY (`activity`) REFERENCES `useractivities` (`activity`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`user`) REFERENCES `useractivities` (`user`) ON DELETE CASCADE ON UPDATE CASCADE
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE `useractivity_dictionarysearch` (
+    `user` VARCHAR(254) NOT NULL COMMENT 'The user who did the activity.',
+    `activity` INT(11) NOT NULL COMMENT 'The activity done by the user.',
+    `word` VARCHAR(200) NOT NULL COMMENT 'The word that was searched for.',
+    `timestamp` DATETIME NOT NULL COMMENT 'The time and date the search was performed at.',
+    PRIMARY KEY (`user`,`activity`,`word`,`timestamp`),
+    FOREIGN KEY (`activity`) REFERENCES `useractivities` (`activity`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`user`) REFERENCES `useractivities` (`user`) ON DELETE CASCADE ON UPDATE CASCADE
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE `oauth_clients` (

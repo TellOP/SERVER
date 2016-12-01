@@ -176,11 +176,14 @@ abstract class UserActivity implements IJSONTypable, \JsonSerializable {
         $apppdo = $appObject->getApplicationPDO();
         // TODO: add additional tables here
         $useractivity = $apppdo->prepare('SELECT U.user, U.activity, A.type, '
-            . 'E.text, E.timestamp, E.passed FROM useractivities AS U '
+            . 'E.text, E.timestamp, E.passed, D.word, D.timestamp '
+            . 'AS dstimestamp FROM useractivities AS U '
             . 'JOIN activity AS A ON U.activity = A.id '
             . 'LEFT JOIN useractivity_essay AS E ON U.user = E.user AND '
-            . 'U.activity = E.activity WHERE U.user = :user AND '
-            . 'U.activity = :activity GROUP BY U.user');
+            . 'U.activity = E.activity '
+            . 'LEFT JOIN useractivity_dictionarysearch AS D ON U.user = D.user '
+            . 'AND U.activity = D.activity '
+            . 'WHERE U.user = :user AND U.activity = :activity GROUP BY U.user');
         if (!$useractivity->execute(array(':user' => $username,
             ':activity' => $id))) {
             throw new DatabaseException('Unable to retrieve user activity '
