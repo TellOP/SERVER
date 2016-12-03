@@ -30,6 +30,7 @@ class StringNetController extends WebServiceClientController {
             $this->dieWSValidation('The q parameter is missing.');
         }
         // Submit to the remote Web server
+        // Check for "Collocation Before"
         $curlHandle = $this->curlOpen(
             'http://nav4.stringnet.org/collo?query=' . htmlentities($_GET['q'])
             . '&radio_query_type=collocation&c_collocate_pos=None'
@@ -41,7 +42,7 @@ class StringNetController extends WebServiceClientController {
         if ($response === FALSE) {
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }
-        $jsonResponse = array();
+        $jsonResponse_before = array();
         $dom = new \DOMDocument;
         libxml_use_internal_errors(true);
         $dom->strictErrorChecking = FALSE;
@@ -75,10 +76,66 @@ class StringNetController extends WebServiceClientController {
                                     str_replace('</td>', '',
                                         str_replace('<td colspan="3" style="padding-left:40px; height: 80px; position: relative">', '',
                                             $dom->saveXML($entry->firstChild))))))));
-                $jsonResponse[] = $result;
+                $jsonResponse_before[] = $result;
             }
             $isOdd = !$isOdd;
         }
+
+        // Check for "Collocation After"
+        $curlHandle = $this->curlOpen(
+            'http://nav4.stringnet.org/collo?query=' . htmlentities($_GET['q'])
+            . '&radio_query_type=collocation&c_collocate_pos=None'
+            . '&c_collocate_position=after&c_target_pos=None&c_order_by=freq'
+            . '&c_min_freq=20');
+        $response = $this->curlExec($curlHandle, $appObject);
+        $this->curlClose($curlHandle);
+        // Parse the response
+        if ($response === FALSE) {
+            $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
+        }
+        $jsonResponse_after = array();
+        $dom = new \DOMDocument;
+        libxml_use_internal_errors(true);
+        $dom->strictErrorChecking = FALSE;
+        if (!$dom->loadHTML($response)) {
+            $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
+        }
+        libxml_clear_errors();
+        $dom->normalizeDocument();
+        $domXPath = new \DOMXPath($dom);
+        $entries = $domXPath->query('/html/body/table[@id = \'collo_table\']/tr');
+        $firstEntry = true;
+        $isOdd = true;
+        $result = array();
+        foreach ($entries as $entry) {
+            if ($firstEntry) {
+                $firstEntry = FALSE;
+                continue;
+            }
+            if ($isOdd) {
+                $result = array(
+                    'collocation' => trim(preg_replace("/\s{2,}/", ' ',
+                        $entry->firstChild->firstChild->textContent)),
+                    'frequency' => (int) $entry->childNodes[2]->childNodes[1]->textContent
+                );
+            } else {
+                $result['sample'] = trim(
+                    preg_replace("/\s{2,}/", ' ',
+                        preg_replace('/<a href="\/collo\/collo\/sents\?.*">more examples<\/a>/', '',
+                            str_replace('</span>', '',
+                                str_replace('<span class="target_color">', '',
+                                    str_replace('</td>', '',
+                                        str_replace('<td colspan="3" style="padding-left:40px; height: 80px; position: relative">', '',
+                                            $dom->saveXML($entry->firstChild))))))));
+                $jsonResponse_after[] = $result;
+            }
+            $isOdd = !$isOdd;
+        }
+
+        $jsonResponse = array();
+        $jsonResponse["before"] = $jsonResponse_before;
+        $jsonResponse["after"] = $jsonResponse_after;
+
         echo json_encode($jsonResponse);
     }
 }

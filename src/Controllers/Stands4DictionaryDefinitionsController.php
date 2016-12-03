@@ -38,7 +38,7 @@ class Stands4DictionaryDefinitionsController extends WebServiceClientController 
         }
 
         $curlHandle = $this->curlOpen(
-            'http://www.stands4.com/services/v2/defs.php?uid=' . $apiUID
+            'http://www.stands4.com/services/v2/syno.php?uid=' . $apiUID
             .'&tokenid=' . $apiPWD . '&word=' . urlencode($_GET['q']));
         $response = $this->curlExec($curlHandle, $appObject);
         $this->curlClose($curlHandle);
@@ -61,11 +61,15 @@ class Stands4DictionaryDefinitionsController extends WebServiceClientController 
             /* Some entries in the Stands4 dictionary do not have an associated
              * part of speech, so set the default value first */
             $arrayEntry['partofspeech'] = 'undefined';
+            $arrayEntry['synonyms'] = '';
+            $arrayEntry['antonyms'] = '';
             foreach ($entry->childNodes as $childNode) {
                 switch ($childNode->nodeName) {
                     case 'term':
                     case 'definition':
                     case 'example':
+                    case 'synonyms':
+                    case 'antonyms':
                         $arrayEntry[$childNode->nodeName] = $childNode->textContent;
                         break;
                     case 'partofspeech':
