@@ -26,7 +26,38 @@ class FeaturedController extends WebServiceClientController {
      */
     public function displayPage($appObject) {
         $this->checkOAuth($appObject, 'exercises');
-        // FIXME Filter by language?!
-        echo json_encode(Activity::getFeaturedExercises($appObject));
+        //$logger = $appObject->getApplicationLogger();
+        //$logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] GET: ', $_GET);
+
+        $lang = array();
+
+        if(isset($_GET['en-GB'])) {
+            array_push($lang, 'en-GB');
+        }
+        if(isset($_GET['es-ES'])) {
+            array_push($lang, 'es-ES');
+        }
+        if(isset($_GET['en-US'])) {
+            array_push($lang, 'en-US');
+        }
+        if(isset($_GET['fr-FR'])) {
+            array_push($lang, 'fr-FR');
+        }
+        if(isset($_GET['de-DE'])) {
+            array_push($lang, 'de-DE');
+        }
+        if(isset($_GET['it-IT'])) {
+            array_push($lang, 'it-IT');
+        }
+
+        if (sizeof($lang) == 0) {
+            array_push($lang, 'en-GB');
+        }
+
+        //$logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] Languages: ', $lang);
+
+        $out = json_encode(Activity::getFeaturedExercises($appObject, $lang));
+        echo $out;
+        //logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] Result: ' . $out);
     }
 }

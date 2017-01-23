@@ -194,15 +194,27 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
     /**
      * Gets a list of all featured exercises.
      * @param \TellOP\Application $appObject The application object.
+     * @param array(string) $language The optional language param. Default: en-GB.
      * @return Activity[] The list of featured exercises.
      * @throws \InvalidArgumentException Thrown if a parameter is <c>null</c>
      * or empty.
      * @throws DatabaseException Thrown if a database error occurs.
      */
-    public static function getFeaturedExercises($appObject) {
+    public static function getFeaturedExercises($appObject, $language = array("en-GB")) {
         if ($appObject === NULL) {
             throw new \InvalidArgumentException('appObject is null');
         }
+        //$logger = $appObject->getApplicationLogger();
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Language parameter: ' , $language);
+
+        $WHERECLAUSE = 'WHERE A.featured = TRUE AND ( A.language = \'' . $language[0] . '\'';
+
+        for ($langCounter = 1; $langCounter < sizeof($language); ++$langCounter) {
+            $WHERECLAUSE = $WHERECLAUSE . ' OR A.language = \'' . $language[$langCounter] . '\'';
+        }
+
+        $WHERECLAUSE = $WHERECLAUSE . ' ) ';
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Where clause: ' . $WHERECLAUSE);
 
         $apppdo = $appObject->getApplicationPDO();
         // TODO: add additional tables here if needed
@@ -210,10 +222,14 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
             . 'A.language, A.featured, E.title, E.description, E.tags, '
             . 'E.minimumwords, E.maximumwords, E.text FROM activity AS A '
             . 'LEFT JOIN activity_essay AS E ON (A.id = E.id) '
-            . 'WHERE A.featured = TRUE GROUP BY A.id');
+            . $WHERECLAUSE
+            . 'GROUP BY A.id');
+
         if (!$getFeatured->execute()) {
             throw new DatabaseException('Unable to execute the query');
         }
+
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] RowCount: ' . $getFeatured->rowCount());
         if ($getFeatured->rowCount() == 0) {
             $getFeatured->closeCursor();
             return array();
@@ -245,27 +261,42 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
      * Gets a list of all featured exercises not done by the current user.
      * @param \TellOP\Application $appObject The application object.
      * @param string $username The username of the current user.
+     * @param array(string) $language The optional language for filtering. Default: en-GB.
      * @return Activity[] The list of featured exercises.
      * @throws \InvalidArgumentException Thrown if a parameter is <c>null</c>
      * or empty.
      * @throws DatabaseException Thrown if a database error occurs.
      */
-    public static function getFeaturedAndNotDoneExercises($appObject, $username) {
+    public static function getFeaturedAndNotDoneExercises($appObject, $username, $language = array("en-GB")) {
         if ($appObject === NULL) {
             throw new \InvalidArgumentException('appObject is null');
         }
+        //$logger = $appObject->getApplicationLogger();
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Language parameter: ' , $language);
+
+        $WHERECLAUSE = 'WHERE A.featured = TRUE AND UA.user != :user AND ( A.language = \'' . $language[0] . '\'';
+
+        for ($langCounter = 1; $langCounter < sizeof($language); ++$langCounter) {
+            $WHERECLAUSE = $WHERECLAUSE . ' OR A.language = \'' . $language[$langCounter] . '\'';
+        }
+
+        $WHERECLAUSE = $WHERECLAUSE . ' ) ';
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Where clause: ' . $WHERECLAUSE);
 
         $apppdo = $appObject->getApplicationPDO();
         // TODO: add additional tables here if needed
         $getFeatured = $apppdo->prepare('SELECT A.id, A.type, A.level, '
             . 'A.language, A.featured, E.title, E.description, E.tags, '
-            . 'E.minimumwords, E.maximumwords, E.text UA.user FROM activity AS A '
+            . 'E.minimumwords, E.maximumwords, E.text, UA.user FROM activity AS A '
             . 'LEFT JOIN activity_essay AS E ON (A.id = E.id) '
             . 'LEFT JOIN useractivities AS UA ON (UA.activity = A.id) '
-            . 'WHERE A.featured = TRUE AND UA.user != :user GROUP BY A.id');
+            . $WHERECLAUSE
+            . 'GROUP BY A.id');
+
         if (!$getFeatured->execute(array(':user' => $username))) {
             throw new DatabaseException('Unable to execute the query');
         }
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] RowCount: ' . $getFeatured->rowCount());
         if ($getFeatured->rowCount() == 0) {
             $getFeatured->closeCursor();
             return array();
