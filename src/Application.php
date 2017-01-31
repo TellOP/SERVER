@@ -260,10 +260,10 @@ class Application {
             (new Controllers\StringNetController)->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/stands4dictionary') {
             (new Controllers\Stands4DictionaryDefinitionsController)->displayPage($this);
-        } elseif ($neatRequestUri == '/api/v1/resource/stands4synonym') {
-            (new Controllers\Stands4DictionarySynonymController)->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/estagger') {
             (new Controllers\StanfordESTagger($this))->displayPage($this);
+        } elseif ($neatRequestUri == '/api/v1/resource/oxford/es') {
+            (new Controllers\OxfordDictionary($this, 'es'))->displayPage($this);
         } else {
             \Flight::route('/', function() {
                 (new Controllers\MainPageController)->displayPage($this);

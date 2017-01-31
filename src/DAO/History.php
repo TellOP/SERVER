@@ -76,7 +76,7 @@ class History {
 
         $apppdo = $appObject->getApplicationPDO();
         $getHistory = $apppdo->prepare('SELECT UA.activity FROM '
-            . 'useractivities AS UA WHERE UA.activity != 21 AND UA.user = :user');
+            . 'useractivities AS UA WHERE UA.activity != 90 AND UA.activity != 91 AND UA.user = :user');
         if (!$getHistory->execute(array('user' => $username))) {
             throw new DatabaseException('Unable to execute the query');
         }

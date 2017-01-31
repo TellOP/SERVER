@@ -166,6 +166,22 @@ abstract class WebServiceClientController implements IController {
     }
 
     /**
+     * Opens a cURL handle (or dies if the function was unable to do so).
+     * @param string $url URL to fetch.
+     * @param array(string) $headerValue Array of header values (k => v).
+     * @return resource cURL handle.
+     */
+    protected function curlOpenCustomHeader($url, $headerValue) {
+        $request = $this->curlOpen($url);
+        if (!curl_setopt_array($request, array(
+            CURLOPT_HTTPHEADER  => $headerValue
+        ))) {
+            $this->dieWS(WebServiceClientController::UNABLE_TO_SET_CURL_OPTION);
+        }
+        return $request;
+    }
+
+    /**
      * Sets a cURL option (or dies if the function was unable to do so).
      * @param resource $request cURL handle.
      * @param int $option cURL option.

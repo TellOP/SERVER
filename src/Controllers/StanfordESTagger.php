@@ -54,6 +54,21 @@ class StanfordESTagger extends WebServiceClientController {
         $this->tmp_prefix = $config['stanford-spanish-tagger']['tmp_prefix']; // prefix of tmp file
         $this->tmp_permission = $config['stanford-spanish-tagger']['tmp_permission']; // permission to set tmp file
 
+        if(!file_exists($this->get_jar()))
+        {
+            //echo "Jar not found: " . $this->get_jar() . "\n";
+            $this->logger->addInfo("Jar not found: " . $this->get_jar());
+            $this->dieWSValidation("Jar not found: " . $this->get_jar());
+            return;
+        }
+        if(!file_exists($this->get_model()))
+        {
+            //echo "Model not found: ".$this->get_model() . "\n";
+            $this->logger->addInfo("Model not found: ".$this->get_model());
+            $this->dieWSValidation("Model not found: ".$this->get_model());
+            return;
+        }
+
         $this->logger = $appObject->getApplicationLogger();
     }
 
@@ -219,19 +234,21 @@ class StanfordESTagger extends WebServiceClientController {
      * @return void
      */
     public function displayPage($appObject) {
-
+        //echo "<xmp>";
         // Perform validation
         if (!isset($_GET['q'])) {
             $this->dieWSValidation('The q parameter is missing.');
         }
 
         $text = base64_decode($_GET['q']);
+        //echo $text . "\n";
         if (!$text) {
             $this->dieWSValidation('The q parameter must be base64 encoded.');
         }
+        $this->logger->addInfo("Pos Text: " . $text);
 
         $tags = $this->array_tag($text);
-
+        //var_dump($tags);
         //echo json_encode($result);
         $out = array();
         foreach ($tags[0]['tagged'] as $tag) {
@@ -348,6 +365,8 @@ class StanfordESTagger extends WebServiceClientController {
             }
         }
         echo json_encode($out);
+        $this->logger->addInfo("Pos decode: " . json_encode($out));
+        //echo "</xmp>";
     }
 
     public function set_path($path)
@@ -443,34 +462,32 @@ class StanfordESTagger extends WebServiceClientController {
         return $this->separator;
     }
 
-    public function tag($txt,$normalize = true,$separator = '')
+    public function tag($txt, $normalize = true, $separator = '')
     {
-        if(!file_exists($this->get_jar()))
-        {
-            $this->logger->addError("Jar not found: " . $this->get_jar());
-            return;
-        }
-        if(!file_exists($this->get_model()))
-        {
-            $this->logger->addError("Model not found: ".$this->get_model());
-            return;
-        }
+        error_reporting(E_ALL);
+        //echo "TAG\n";
+
         if($separator == '')
         {
             $separator = $this->separator;
         }
 
         $tf = tempnam($this->tmp_path, $this->tmp_prefix);
+        //echo "Tempnam: " . $tf . "\n";
         chmod($tf, octdec($this->tmp_permission));
 
         chmod($tf, 0644);
 
         $words = explode(' ',$txt);
 
+        //echo "words: " . json_encode($words) . "\n";
+
         if($this->use_pspell)
         {
             $txt = $this->spellcheck($txt);
         }
+        
+        //echo "txt: " . $txt . "\n";
 
         file_put_contents($tf, $txt);
 
@@ -483,8 +500,10 @@ class StanfordESTagger extends WebServiceClientController {
             2 => array("pipe", "w")   // stderr
         );
 
-        $cmd = escapeshellcmd('java '.$options.' -cp "'.$this->jar.';" edu.stanford.nlp.tagger.maxent.MaxentTagger -model '.$this->get_model().' -textFile '.$tf.' -outputFormat slashTags -tagSeparator '.$separator.' -encoding utf8');
+        //$cmd = escapeshellcmd('java '.$options.' -cp "'.$this->jar.';" edu.stanford.nlp.tagger.maxent.MaxentTagger -model '.$this->get_model().' -textFile '.$tf.' -outputFormat slashTags -tagSeparator '.$separator.' -encoding utf8');
+        $cmd = escapeshellcmd('java '.$options.' -cp '.$this->get_jar().' edu.stanford.nlp.tagger.maxent.MaxentTagger -model '.$this->get_model().' -textFile '.$tf.' -outputFormat slashTags -tagSeparator '.$separator.' -encoding utf8');
 
+        //echo "cmd: " . $cmd . "\n";
 
         $process = proc_open($cmd, $descriptorspec, $pipes, dirname($this->get_jar()));
 
