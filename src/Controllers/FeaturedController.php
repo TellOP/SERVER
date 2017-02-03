@@ -25,9 +25,11 @@ class FeaturedController extends WebServiceClientController {
      * @throws DatabaseException Thrown if a database error occurs.
      */
     public function displayPage($appObject) {
+        //error_reporting(E_ALL);
         $this->checkOAuth($appObject, 'exercises');
-        //$logger = $appObject->getApplicationLogger();
+        $logger = $appObject->getApplicationLogger();
         //$logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] GET: ', $_GET);
+        //$logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] POST: ', $_POST);
 
         $lang = array();
 
@@ -54,10 +56,12 @@ class FeaturedController extends WebServiceClientController {
             array_push($lang, 'en-GB');
         }
 
-        //$logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] Languages: ', $lang);
+        $logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] Languages: ', $lang);
 
-        $out = json_encode(Activity::getFeaturedExercises($appObject, $lang));
+        $result = Activity::getFeaturedExercises($appObject, $lang);
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Received object: ', $result);
+        $out = json_encode($result);
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Output: ' . $out);
         echo $out;
-        //logger->addInfo('[' . __CLASS__ . ':' . __LINE__ . '] Result: ' . $out);
     }
 }

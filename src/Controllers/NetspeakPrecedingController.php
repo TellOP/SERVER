@@ -32,6 +32,7 @@ class NetspeakPrecedingController extends WebServiceClientController {
         if (!isset($_GET['t'])) {
             $this->dieWSValidation('The t parameter is missing.');
         }
+        $appObject->getApplicationLogger()->addInfo("Netspeak: " . $_GET['q']);
         $tvalue = (int) $_GET['t'];
         if ($tvalue < 1 || $tvalue > 1000) {
             $this->dieWSValidation('The t parameter must be a number between 1'

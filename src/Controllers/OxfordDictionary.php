@@ -48,10 +48,11 @@ class OxfordDictionary extends WebServiceClientController {
         if (!isset($_GET['q'])) {
             $this->dieWSValidation('The q parameter is missing.');
         }
+        $logger->addInfo("Oxford: " . $_GET['q']);
 
-        $logger->addInfo($_GET['q']);
-        $logger->addInfo(urldecode($_GET['q']));
-        $logger->addInfo(base64_decode(urldecode($_GET['q'])));
+        //$logger->addInfo($_GET['q']);
+        //$logger->addInfo(urldecode($_GET['q']));
+        //$logger->addInfo(base64_decode(urldecode($_GET['q'])));
 
         $search = base64_decode(urldecode($_GET['q']));
         if (!$search) {
@@ -91,7 +92,7 @@ class OxfordDictionary extends WebServiceClientController {
 
         if($response_info['http_code'] != '200') {
             $logger->addError("Response status: " . $response_info['http_code']);
-            $logger->addErro("Response: " . $response);
+            $logger->addError("Response: " . $response);
             $logger->addError("Response Info: ", $response_info);
             echo json_encode(array("no_value" => "error"));
             return;

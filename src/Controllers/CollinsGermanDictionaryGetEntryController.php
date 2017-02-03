@@ -14,7 +14,7 @@
  */
 namespace TellOP\Controllers;
 
-class CollinsEnglishDictionaryGetEntryController extends WebServiceClientController {
+class CollinsGermanDictionaryGetEntryController extends WebServiceClientController {
     /**
      * Gets the part of speech corresponding to the given XML string
      * representation.
@@ -24,6 +24,12 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
     private function getPartOfSpeech($text) {
         switch ($text) {
             // TODO: this list is reverse engineered
+            case 'feminine noun':
+            case 'masculine noun':
+            case 'neuter noun':
+            case 'noun':
+                return 'commonNoun';
+
             case 'adjective':
             case 'adverb':
             case 'conjunction':
@@ -31,27 +37,23 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
             case 'exclamation':
             case 'preposition':
             case 'pronoun':
-            // TODO: the dictionary does not discriminate between modal,
-            // auxiliary... and ordinary verbs
             case 'verb':
                 return $text;
-            // TODO: the dictionary does not discriminate between
-            // common and proper nouns
-            case 'noun':
-                return 'commonNoun';
+
             default:
-                return 'unclassified';
+                return $text;
         }
     }
 
     /**
-     * Performs a query to the Collins English Dictionary Web service to get a
+     * Performs a query to the Collins German Dictionary Web service to get a
      * single word definition.
      * @param \TellOP\Application $appObject Application object.
      * @return void
      */
     public function displayPage($appObject) {
-        $this->checkOAuth($appObject, 'onlineresources');
+        //$this->checkOAuth($appObject, 'onlineresources');
+        $logger = $appObject->getApplicationLogger();
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->dieWSMethodNotSupported();
         }
@@ -59,13 +61,12 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
         if (!isset($_GET['entryId'])) {
             $this->dieWSValidation('The entryId parameter is missing.');
         }
-        $appObject->getApplicationLogger()->addInfo("Collins Entry ID: " . $_GET['entryId']);
         $apiKey = $appObject->getConfig()['apikeys']['collinsDictionary'];
         if (!isset($apiKey) || $apiKey == '') {
             $this->dieWS(WebServiceClientController::SERVER_SIDE_API_KEY_MISSING);
         }
         $curlHandle = $this->curlOpen(
-            'https://api.collinsdictionary.com/api/v1/dictionaries/english/entries/'
+            'https://api.collinsdictionary.com/api/v1/dictionaries/german-english/entries/'
             . urlencode($_GET['entryId']) . '?format=xml');
         $this->curlSetOption($curlHandle, CURLOPT_HTTPHEADER, array(
             'Host: api.collinsdictionary.com',
@@ -74,6 +75,16 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
         ));
         $response = $this->curlExec($curlHandle, $appObject);
         $httpStatus = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+
+        $response_info = curl_getinfo($curlHandle);
+        if($response_info['http_code'] != '200') {
+            $logger->addError("Response status: " . $response_info['http_code']);
+            $logger->addError("Response: " . $response);
+            $logger->addError("Response Info: ", $response_info);
+            echo json_encode(array("no_value" => "error"));
+            return;
+        }
+
         $this->curlClose($curlHandle);
         if ($httpStatus != 200) {
             $this->dieWS(WebServiceClientController::ERROR_IN_CURL_RESPONSE);
@@ -153,7 +164,7 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
                 $homSenseJSON['examples'] = $homSenseCitationJSON;
 
                 $homSenseSeeAlso
-                    = $domXPath->query("${nestedPrefix}xr/ref[@resource='english']",
+                    = $domXPath->query("${nestedPrefix}xr/ref[@resource='German']",
                     $homSense);
                 $homSenseSeeAlsoJSON = array();
                 if ($homSenseSeeAlso !== FALSE) {
@@ -170,7 +181,7 @@ class CollinsEnglishDictionaryGetEntryController extends WebServiceClientControl
                 $homSenseJSON['seeAlso'] = $homSenseSeeAlsoJSON;
 
                 $homSenseRelated
-                    = $domXPath->query("${nestedPrefix}re/xr/ref[@resource='english']",
+                    = $domXPath->query("${nestedPrefix}re/xr/ref[@resource='German']",
                     $homSense);
                 $homSenseRelatedJSON = array();
                 if ($homSenseRelated !== FALSE) {

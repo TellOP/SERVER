@@ -204,7 +204,7 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
         if ($appObject === NULL) {
             throw new \InvalidArgumentException('appObject is null');
         }
-        //$logger = $appObject->getApplicationLogger();
+        $logger = $appObject->getApplicationLogger();
         //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Language parameter: ' , $language);
 
         $WHERECLAUSE = 'WHERE A.featured = TRUE AND ( A.language = \'' . $language[0] . '\'';
@@ -218,14 +218,17 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
 
         $apppdo = $appObject->getApplicationPDO();
         // TODO: add additional tables here if needed
-        $getFeatured = $apppdo->prepare('SELECT A.id, A.type, A.level, '
-            . 'A.language, A.featured, E.title, E.description, E.tags, '
-            . 'E.minimumwords, E.maximumwords, E.text FROM activity AS A '
-            . 'LEFT JOIN activity_essay AS E ON (A.id = E.id) '
-            . $WHERECLAUSE
-            . 'GROUP BY A.id');
+        $queryString = 'SELECT A.id, A.type, A.level, '
+                     . 'A.language, A.featured, E.title, E.description, E.tags, '
+                     . 'E.minimumwords, E.maximumwords, E.text FROM activity AS A '
+                     . 'LEFT JOIN activity_essay AS E ON (A.id = E.id) '
+                     . $WHERECLAUSE . ' '
+                     . 'GROUP BY A.id';
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Query: ' . $queryString);
+        $getFeatured = $apppdo->prepare($queryString);
 
         if (!$getFeatured->execute()) {
+            $logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Exception in the query: ' . $getFeatured->errorInfo(), $getFeatured);
             throw new DatabaseException('Unable to execute the query');
         }
 
@@ -235,10 +238,13 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
             return array();
         }
         if (($featured = $getFeatured->fetchAll(\PDO::FETCH_ASSOC)) === FALSE) {
+            $logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Unable to fetchAll: ' . $getFeatured->errorInfo(), $getFeatured);
             throw new DatabaseException('Unable to fetch the results');
         }
         $getFeatured->closeCursor();
         $objFeatured = array();
+
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Start main conversion loop.');
         foreach ($featured as $activity) {
             switch ($activity['type']) {
                 case ActivityEssay::getJSONType():
@@ -252,8 +258,13 @@ abstract class Activity implements IJSONTypable, \JsonSerializable {
                         . 'in the database');
             }
             $newActivity->getActivityFromFields($activity);
+            //$logger->addInfo('|---[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Activity: ' . print_r($newActivity, true));            
+            $json_val = json_encode($newActivity, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            //$logger->addInfo('|---[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] JSON: ' . $json_val);
             $objFeatured[] = $newActivity;
+            //$logger->addInfo('|---[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Result until now: ', $objFeatured);
         }
+        //$logger->addInfo('[' . __CLASS__ . ' ' . __FUNCTION__ . ':' . __LINE__ . '] Return value: ', $objFeatured);
         return $objFeatured;
     }
 

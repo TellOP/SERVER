@@ -238,6 +238,8 @@ class LexTutorController extends WebServiceClientController {
                 = (float) str_replace(',', '', str_replace(chr(194).chr(160),
                 '', $countIndexLog10Split[0]));
         }
+
+        $appObject->getApplicationLogger()->addInfo("LexTutorResult: " . json_encode($jsonResponse));
         echo json_encode($jsonResponse);
     }
 }

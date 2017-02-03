@@ -37,22 +37,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 namespace TellOP\Controllers;
-class StanfordESTagger extends WebServiceClientController {
+class StanfordDETagger extends WebServiceClientController {
 
     public function __construct($appObject) {
         $config = $appObject->getConfig();
 
-        $this->model = $config['stanford-spanish-tagger']['model'];
+        $this->model = $config['stanford-german-tagger']['model'];
         $this->set_model($this->model);
 
-        $this->java_path = $config['stanford-spanish-tagger']['java_path']; // the command to run java
-        $this->java_options = $config['stanford-spanish-tagger']['java_options']; // array of java switch options
-        $this->jar = $config['stanford-spanish-tagger']['jar']; // the jar to use located in $path
-        $this->path = $config['stanford-spanish-tagger']['path'];	// path to where the standford postagger directory resides
+        $this->java_path = $config['stanford-german-tagger']['java_path']; // the command to run java
+        $this->java_options = $config['stanford-german-tagger']['java_options']; // array of java switch options
+        $this->jar = $config['stanford-german-tagger']['jar']; // the jar to use located in $path
+        $this->path = $config['stanford-german-tagger']['path'];	// path to where the standford postagger directory resides
 
-        $this->tmp_path = $config['stanford-spanish-tagger']['tmp_path'];// directory to store tmp file
-        $this->tmp_prefix = $config['stanford-spanish-tagger']['tmp_prefix']; // prefix of tmp file
-        $this->tmp_permission = $config['stanford-spanish-tagger']['tmp_permission']; // permission to set tmp file
+        $this->tmp_path = $config['stanford-german-tagger']['tmp_path'];// directory to store tmp file
+        $this->tmp_prefix = $config['stanford-german-tagger']['tmp_prefix']; // prefix of tmp file
+        $this->tmp_permission = $config['stanford-german-tagger']['tmp_permission']; // permission to set tmp file
 
         if(!file_exists($this->get_jar()))
         {
@@ -229,7 +229,7 @@ class StanfordESTagger extends WebServiceClientController {
     );
 
     /**
-     * Performs a query to the Stanford Tagger for the Spanish language.
+     * Performs a query to the Stanford Tagger for the German language.
      * @param \TellOP\Application $appObject Application object.
      * @return void
      */
@@ -252,111 +252,99 @@ class StanfordESTagger extends WebServiceClientController {
         //echo json_encode($result);
         $out = array();
         foreach ($tags[0]['tagged'] as $tag) {
-            // http://nlp.stanford.edu/software/spanish-faq.shtml
+            // http://nlp.stanford.edu/software/German-faq.shtml
             switch ($tag['tag']) {
-                case 'ao0000':
-                case 'aq0000':
+                case 'ADJA':
+                case 'ADJD':
                     array_push($out, array("pos" => 'adjective', "token" => $tag['token']));
                     break;
 
-                case 'cc':
-                case 'cs':
+                case 'KOUI':
+                case 'KOUS':
+                case 'KON':
+                case 'KOKOM':
                     array_push($out, array("pos" => 'conjunction', "token" => $tag['token']));
                     break;
 
-                case 'da0000':
-                case 'dd0000':
-                case 'de0000':
-                case 'di0000':
-                case 'dn0000':
-                case 'dp0000':
-                case 'dt0000':
-                    array_push($out, array("pos" => 'determiner', "token" => $tag['token']));
-                    break;
-
-                case 'f0':
-                case 'faa':
-                case 'fat':
-                case 'fc':
-                case 'fd':
-                case 'fe':
-                case 'fg':
-                case 'fh':
-                case 'fia':
-                case 'fit':
-                case 'fp':
-                case 'fpa':
-                case 'fpt':
-                case 'fs':
-                case 'ft':
-                case 'fx':
-                case 'fz':
-                case 'i':
+                case 'ITJ':
                     array_push($out, array("pos" => 'interjectionOrDiscourseMarker', "token" => $tag['token']));
                     break;
 
-                case 'nc00000':
-                case 'nc0n000':
-                case 'nc0p000':
-                case 'nc0s000':
+                case 'NN':
                     array_push($out, array("pos" => 'commonNoun', "token" => $tag['token']));
                     break;
 
-                case 'np00000':
-                    array_push($out, array("pos" => 'commonNoun', "token" => $tag['token']));
+                case 'NE':
+                    array_push($out, array("pos" => 'properNoun', "token" => $tag['token']));
                     break;
 
-                case 'rg':
-                case 'rn':
+                case 'FM':
+                    array_push($out, array("pos" => 'foreignWord', "token" => $tag['token']));
+                    break;
+
+                case 'PDS':
+                case 'PDAT':
+                case 'PIS':
+                case 'PIAT':
+                case 'PIDAT':
+                case 'PPER':
+                case 'PPOSS':
+                case 'PPOSAT':
+                case 'PRELS':
+                case 'PRELAT':
+                case 'PRF':
+                case 'PWS':
+                case 'PWAT':
+                case 'PRF':
+                    array_push($out, array("pos" => 'pronoun', "token" => $tag['token']));
+                    break;
+
+                case 'ADV':
+                case 'PWAV':
+                case 'PAV':
                     array_push($out, array("pos" => 'adverb', "token" => $tag['token']));
                     break;
 
-                case 'sp000':
+                case 'APPR':
+                case 'APPRART':
+                case 'APPO':
+                case 'APZR':
+                case 'APPR':
+                case 'APPR':
+                case 'APPR':
                     array_push($out, array("pos" => 'preposition', "token" => $tag['token']));
                     break;
 
-                case 'vmg0000':
-                case 'vmic000':
-                case 'vmif000':
-                case 'vmii000':
-                case 'vmip000':
-                case 'vmis000':
-                case 'vmm0000':
-                case 'vmn0000':
-                case 'vmp0000':
-                case 'vmsi000':
-                case 'vmsp000':
+                case 'PTKNEG':
+                case 'PTKVZ':
+                case 'PTKANT':
+                case 'PTKA':
+                    array_push($out, array("pos" => 'existentialParticle', "token" => $tag['token']));
+                    break;
+
+                case 'VVFIN':
+                case 'VVIMP':
+                case 'VVINF':
+                case 'VVIZU':
+                case 'VVPP':
+                case 'VAFIN':
+                case 'VAIMP':
+                case 'VAINF':
+                case 'VAPP':
+                case 'VMFIN':
+                case 'VMINF':
+                case 'VMPP':
                     array_push($out, array("pos" => 'verb', "token" => $tag['token']));
                     break;
 
-                case 'vag0000':
-                case 'vaic000':
-                case 'vaif000':
-                case 'vaii000':
-                case 'vaip000':
-                case 'vais000':
-                case 'vam0000':
-                case 'van0000':
-                case 'vap0000':
-                case 'vasi000':
-                case 'vasp000':
-                    array_push($out, array("pos" => 'auxiliaryVerb', "token" => $tag['token']));
+                case 'ORD':
+                    array_push($out, array("pos" => 'ordinal', "token" => $tag['token']));
                     break;
 
-
-                case 'vsg0000':
-                case 'vsic000':
-                case 'vsif000':
-                case 'vsii000':
-                case 'vsip000':
-                case 'vsis000':
-                case 'vsm0000':
-                case 'vsn0000':
-                case 'vsp0000':
-                case 'vssf000':
-                case 'vssi000':
-                case 'vssp000':
-                    array_push($out, array("pos" => 'modalVerb', "token" => $tag['token']));
+                case '$,':
+                case '$.':
+                case '$(':
+                    // DO NOTHING WITH PUNCTUATION
                     break;
 
                 default:

@@ -262,8 +262,14 @@ class Application {
             (new Controllers\Stands4DictionaryDefinitionsController)->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/estagger') {
             (new Controllers\StanfordESTagger($this))->displayPage($this);
+        } elseif ($neatRequestUri == '/api/v1/resource/detagger') {
+            (new Controllers\StanfordDETagger($this))->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/oxford/es') {
             (new Controllers\OxfordDictionary($this, 'es'))->displayPage($this);
+        } elseif ($neatRequestUri == '/api/v1/resource/collinsde') {
+            (new Controllers\CollinsGermanDictionaryController)->displayPage($this);
+        } elseif ($neatRequestUri == '/api/v1/resource/collinsdegetentry') {
+            (new Controllers\CollinsGermanDictionaryGetEntryController)->displayPage($this);
         } else {
             \Flight::route('/', function() {
                 (new Controllers\MainPageController)->displayPage($this);

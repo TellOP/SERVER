@@ -29,6 +29,7 @@ class Stands4DictionaryDefinitionsController extends WebServiceClientController 
         if (!isset($_GET['q'])) {
             $this->dieWSValidation('The q parameter is missing.');
         }
+        $appObject->getApplicationLogger()->addInfo("Stands4: " . $_GET['q']);
 
         $apiUID = $appObject->getConfig()['apikeys']['stands4DictionaryDefinitionsUID'];
         $apiPWD =  $appObject->getConfig()['apikeys']['stands4DictionaryDefinitionsTokenID'];

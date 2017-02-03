@@ -29,6 +29,7 @@ class StringNetController extends WebServiceClientController {
         if (!isset($_GET['q'])) {
             $this->dieWSValidation('The q parameter is missing.');
         }
+        $appObject->getApplicationLogger()->addInfo("StringNet: " . $_GET['q']);
         // Submit to the remote Web server
         // Check for "Collocation Before"
         $curlHandle = $this->curlOpen(

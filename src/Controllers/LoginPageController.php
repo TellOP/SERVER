@@ -289,8 +289,7 @@ class LoginPageController implements IController {
             }
             // Log in successful, store the username, rehash the password if
             // needed and redirect to the dashboard
-            $logger->addInfo('User logging in.',
-                array('username' => $_POST['email']));
+            //$logger->addInfo('User logging in.', array('username' => $_POST['email']));
             $_SESSION['username'] = $_POST['email'];
             $_SESSION['language'] = $credentials['locale'];
             session_regenerate_id(true);
