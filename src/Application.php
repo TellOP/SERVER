@@ -264,12 +264,16 @@ class Application {
             (new Controllers\StanfordESTagger($this))->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/detagger') {
             (new Controllers\StanfordDETagger($this))->displayPage($this);
+        } elseif ($neatRequestUri == '/api/v1/resource/entagger') {
+            (new Controllers\StanfordENTagger($this))->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/oxford/es') {
             (new Controllers\OxfordDictionary($this, 'es'))->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/collinsde') {
             (new Controllers\CollinsGermanDictionaryController)->displayPage($this);
         } elseif ($neatRequestUri == '/api/v1/resource/collinsdegetentry') {
             (new Controllers\CollinsGermanDictionaryGetEntryController)->displayPage($this);
+        } elseif ($neatRequestUri == '/api/v1/resource/cefr') {
+            (new Controllers\CEFRTagger($this))->displayPage($this);
         } else {
             \Flight::route('/', function() {
                 (new Controllers\MainPageController)->displayPage($this);

@@ -21,7 +21,7 @@ class StringNetController extends WebServiceClientController {
      * @return void
      */
     public function displayPage($appObject) {
-        $this->checkOAuth($appObject, 'onlineresources');
+        //$this->checkOAuth($appObject, 'onlineresources');
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->dieWSMethodNotSupported();
         }
@@ -32,15 +32,18 @@ class StringNetController extends WebServiceClientController {
         $appObject->getApplicationLogger()->addInfo("StringNet: " . $_GET['q']);
         // Submit to the remote Web server
         // Check for "Collocation Before"
-        $curlHandle = $this->curlOpen(
-            'http://nav4.stringnet.org/collo?query=' . htmlentities($_GET['q'])
+        $URL = 'http://nav4.stringnet.org/collo?query=' . htmlentities($_GET['q'])
             . '&radio_query_type=collocation&c_collocate_pos=None'
             . '&c_collocate_position=before&c_target_pos=None&c_order_by=freq'
-            . '&c_min_freq=20');
+            . '&c_min_freq=20';
+        $curlHandle = $this->curlOpen($URL);
+
+        $appObject->getApplicationLogger()->addInfo("StringNet cURL Before: " . $URL);
         $response = $this->curlExec($curlHandle, $appObject);
         $this->curlClose($curlHandle);
         // Parse the response
         if ($response === FALSE) {
+            $appObject->getApplicationLogger()->addInfo("StringNet UNABLE_TO_PARSE_REMOTE_RESPONSE (" . __LINE__ . "): ", $response);
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }
         $jsonResponse_before = array();
@@ -48,6 +51,7 @@ class StringNetController extends WebServiceClientController {
         libxml_use_internal_errors(true);
         $dom->strictErrorChecking = FALSE;
         if (!$dom->loadHTML($response)) {
+            $appObject->getApplicationLogger()->addInfo("StringNet UNABLE_TO_PARSE_REMOTE_RESPONSE (" . __LINE__ . ")");
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }
         libxml_clear_errors();
@@ -83,15 +87,17 @@ class StringNetController extends WebServiceClientController {
         }
 
         // Check for "Collocation After"
-        $curlHandle = $this->curlOpen(
-            'http://nav4.stringnet.org/collo?query=' . htmlentities($_GET['q'])
+        $URL = 'http://nav4.stringnet.org/collo?query=' . htmlentities($_GET['q'])
             . '&radio_query_type=collocation&c_collocate_pos=None'
             . '&c_collocate_position=after&c_target_pos=None&c_order_by=freq'
-            . '&c_min_freq=20');
+            . '&c_min_freq=20';
+        $appObject->getApplicationLogger()->addInfo("StringNet cURL After: " . $URL);
+        $curlHandle = $this->curlOpen($URL);
         $response = $this->curlExec($curlHandle, $appObject);
         $this->curlClose($curlHandle);
         // Parse the response
         if ($response === FALSE) {
+            $appObject->getApplicationLogger()->addInfo("StringNet UNABLE_TO_PARSE_REMOTE_RESPONSE (" . __LINE__ . "): ", $response);
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }
         $jsonResponse_after = array();
@@ -99,6 +105,7 @@ class StringNetController extends WebServiceClientController {
         libxml_use_internal_errors(true);
         $dom->strictErrorChecking = FALSE;
         if (!$dom->loadHTML($response)) {
+            $appObject->getApplicationLogger()->addInfo("StringNet UNABLE_TO_PARSE_REMOTE_RESPONSE (" . __LINE__ . ")");
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }
         libxml_clear_errors();

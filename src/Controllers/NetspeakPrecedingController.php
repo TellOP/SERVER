@@ -21,7 +21,7 @@ class NetspeakPrecedingController extends WebServiceClientController {
      * @return void
      */
     public function displayPage($appObject) {
-        $this->checkOAuth($appObject, 'onlineresources');
+        //$this->checkOAuth($appObject, 'onlineresources');
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->dieWSMethodNotSupported();
         }
@@ -39,15 +39,14 @@ class NetspeakPrecedingController extends WebServiceClientController {
                 . ' and 1000.');
         }
 
-        $curlHandle = $this->curlOpen(
-            'http://api.netspeak.org/netspeak3/search?query=%3F'
-            . urlencode($_GET['q']) . '&topk=' . urlencode($_GET['t'])
-            . '&corpus=web-en&format=text');
+        $calledURL = 'http://api.netspeak.org/netspeak3/search?query=%3F' . urlencode($_GET['q']) . '&topk=' . urlencode($_GET['t']) . '&corpus=web-en&format=text'
+        $curlHandle = $this->curlOpen($calledURL);
         $response = $this->curlExec($curlHandle, $appObject);
         $this->curlClose($curlHandle);
 
         // Parse the response
         if ($response === FALSE) {
+            $appObject->getApplicationLogger()->addInfo("Netspeak UNABLE_TO_PARSE_REMOTE_RESPONSE (" . __LINE__ . "): ", $response);
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }
         $nextWords = array();

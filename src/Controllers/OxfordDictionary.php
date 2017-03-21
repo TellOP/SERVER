@@ -34,7 +34,7 @@ class OxfordDictionary extends WebServiceClientController {
      */
     public function displayPage($appObject)
     {
-        //error_reporting(E_ALL);
+        error_reporting(0);
         //echo "<xmp>";
         $logger = $appObject->getApplicationLogger();
 
@@ -48,11 +48,9 @@ class OxfordDictionary extends WebServiceClientController {
         if (!isset($_GET['q'])) {
             $this->dieWSValidation('The q parameter is missing.');
         }
-        $logger->addInfo("Oxford: " . $_GET['q']);
+        $logger->addError("Oxford: " . $_GET['q'] . "' decoded as: " . base64_decode(urldecode($_GET['q'])));
 
-        //$logger->addInfo($_GET['q']);
-        //$logger->addInfo(urldecode($_GET['q']));
-        //$logger->addInfo(base64_decode(urldecode($_GET['q'])));
+
 
         $search = base64_decode(urldecode($_GET['q']));
         if (!$search) {
@@ -83,18 +81,18 @@ class OxfordDictionary extends WebServiceClientController {
         );
 
         $response = $this->curlExec($curlHandle, $appObject);
-        $this->curlClose($curlHandle);
         // Parse the response
         if ($response === FALSE) {
             $this->dieWS(WebServiceClientController::UNABLE_TO_PARSE_REMOTE_RESPONSE);
         }
         $response_info = curl_getinfo($curlHandle);
+        $this->curlClose($curlHandle);
 
-        if($response_info['http_code'] != '200') {
-            $logger->addError("Response status: " . $response_info['http_code']);
-            $logger->addError("Response: " . $response);
-            $logger->addError("Response Info: ", $response_info);
-            echo json_encode(array("no_value" => "error"));
+        if($response_info['http_code'] != '200' && $response_info['http_code'] != '') {
+            $logger->addError("(" . __FILE__ . ":" . __LINE__ . ")Response status: " . $response_info['http_code']);
+            $logger->addError("(" . __FILE__ . ":" . __LINE__ . ")Response: " . $response);
+            $logger->addError("(" . __FILE__ . ":" . __LINE__ . ")Response Info: ", $response_info);
+            $logger->addError("(" . __FILE__ . ":" . __LINE__ . ")'" . $_GET['q'] . "' decoded as: " . base64_decode(urldecode($_GET['q'])));
             return;
         }
         //var_dump($response);

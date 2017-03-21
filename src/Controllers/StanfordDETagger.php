@@ -234,7 +234,6 @@ class StanfordDETagger extends WebServiceClientController {
      * @return void
      */
     public function displayPage($appObject) {
-        //echo "<xmp>";
         // Perform validation
         if (!isset($_GET['q'])) {
             $this->dieWSValidation('The q parameter is missing.');
@@ -245,111 +244,121 @@ class StanfordDETagger extends WebServiceClientController {
         if (!$text) {
             $this->dieWSValidation('The q parameter must be base64 encoded.');
         }
+        //echo "<xmp>";
+        //var_dump($text);
+        //echo "</xmp>";
         $this->logger->addInfo("Pos Text: " . $text);
 
         $tags = $this->array_tag($text);
+        //echo "<hr color='red'><xmp>";
         //var_dump($tags);
-        //echo json_encode($result);
+        //echo "</xmp><hr color='red'>";
         $out = array();
-        foreach ($tags[0]['tagged'] as $tag) {
-            // http://nlp.stanford.edu/software/German-faq.shtml
-            switch ($tag['tag']) {
-                case 'ADJA':
-                case 'ADJD':
-                    array_push($out, array("pos" => 'adjective', "token" => $tag['token']));
-                    break;
+        foreach ($tags as $rootTag) {
+            //echo "<hr color='blue'><xmp>";
+            //var_dump($rootTag);
+            //echo "</xmp><hr color='blue'>";
+            //continue;
+            foreach ($rootTag["tagged"] as $word) {
+                //echo "<hr color='green'><xmp>";
+                //var_dump($word);
+                //echo "</xmp><hr color='green'>";
+                //continue;
+                // http://nlp.stanford.edu/software/spanish-faq.shtml
+                switch ($word['tag']) {
+                    case 'ADJA':
+                    case 'ADJD':
+                        array_push($out, array("pos" => 'adjective', "token" => $word['token']));
+                        break;
 
-                case 'KOUI':
-                case 'KOUS':
-                case 'KON':
-                case 'KOKOM':
-                    array_push($out, array("pos" => 'conjunction', "token" => $tag['token']));
-                    break;
+                    case 'KOUI':
+                    case 'KOUS':
+                    case 'KON':
+                    case 'KOKOM':
+                        array_push($out, array("pos" => 'conjunction', "token" => $word['token']));
+                        break;
 
-                case 'ITJ':
-                    array_push($out, array("pos" => 'interjectionOrDiscourseMarker', "token" => $tag['token']));
-                    break;
+                    case 'ITJ':
+                        array_push($out, array("pos" => 'interjectionOrDiscourseMarker', "token" => $word['token']));
+                        break;
 
-                case 'NN':
-                    array_push($out, array("pos" => 'commonNoun', "token" => $tag['token']));
-                    break;
+                    case 'NN':
+                        array_push($out, array("pos" => 'commonNoun', "token" => $word['token']));
+                        break;
 
-                case 'NE':
-                    array_push($out, array("pos" => 'properNoun', "token" => $tag['token']));
-                    break;
+                    case 'NE':
+                        array_push($out, array("pos" => 'properNoun', "token" => $word['token']));
+                        break;
 
-                case 'FM':
-                    array_push($out, array("pos" => 'foreignWord', "token" => $tag['token']));
-                    break;
+                    case 'FM':
+                        array_push($out, array("pos" => 'foreignWord', "token" => $word['token']));
+                        break;
 
-                case 'PDS':
-                case 'PDAT':
-                case 'PIS':
-                case 'PIAT':
-                case 'PIDAT':
-                case 'PPER':
-                case 'PPOSS':
-                case 'PPOSAT':
-                case 'PRELS':
-                case 'PRELAT':
-                case 'PRF':
-                case 'PWS':
-                case 'PWAT':
-                case 'PRF':
-                    array_push($out, array("pos" => 'pronoun', "token" => $tag['token']));
-                    break;
+                    case 'PDS':
+                    case 'PDAT':
+                    case 'PIS':
+                    case 'PIAT':
+                    case 'PIDAT':
+                    case 'PPER':
+                    case 'PPOSS':
+                    case 'PPOSAT':
+                    case 'PRELS':
+                    case 'PRELAT':
+                    case 'PRF':
+                    case 'PWS':
+                    case 'PWAT':
+                        array_push($out, array("pos" => 'pronoun', "token" => $word['token']));
+                        break;
 
-                case 'ADV':
-                case 'PWAV':
-                case 'PAV':
-                    array_push($out, array("pos" => 'adverb', "token" => $tag['token']));
-                    break;
+                    case 'ADV':
+                    case 'PWAV':
+                    case 'PAV':
+                        array_push($out, array("pos" => 'adverb', "token" => $word['token']));
+                        break;
 
-                case 'APPR':
-                case 'APPRART':
-                case 'APPO':
-                case 'APZR':
-                case 'APPR':
-                case 'APPR':
-                case 'APPR':
-                    array_push($out, array("pos" => 'preposition', "token" => $tag['token']));
-                    break;
+                    case 'APPR':
+                    case 'APPRART':
+                    case 'APPO':
+                    case 'APZR':
+                        array_push($out, array("pos" => 'preposition', "token" => $word['token']));
+                        break;
 
-                case 'PTKNEG':
-                case 'PTKVZ':
-                case 'PTKANT':
-                case 'PTKA':
-                    array_push($out, array("pos" => 'existentialParticle', "token" => $tag['token']));
-                    break;
+                    case 'PTKNEG':
+                    case 'PTKVZ':
+                    case 'PTKANT':
+                    case 'PTKA':
+                        array_push($out, array("pos" => 'existentialParticle', "token" => $word['token']));
+                        break;
 
-                case 'VVFIN':
-                case 'VVIMP':
-                case 'VVINF':
-                case 'VVIZU':
-                case 'VVPP':
-                case 'VAFIN':
-                case 'VAIMP':
-                case 'VAINF':
-                case 'VAPP':
-                case 'VMFIN':
-                case 'VMINF':
-                case 'VMPP':
-                    array_push($out, array("pos" => 'verb', "token" => $tag['token']));
-                    break;
+                    case 'VVFIN':
+                    case 'VVIMP':
+                    case 'VVINF':
+                    case 'VVIZU':
+                    case 'VVPP':
+                    case 'VAFIN':
+                    case 'VAIMP':
+                    case 'VAINF':
+                    case 'VAPP':
+                    case 'VMFIN':
+                    case 'VMINF':
+                    case 'VMPP':
+                        array_push($out, array("pos" => 'verb', "token" => $word['token']));
+                        break;
 
-                case 'ORD':
-                    array_push($out, array("pos" => 'ordinal', "token" => $tag['token']));
-                    break;
+                    case 'ORD':
+                        array_push($out, array("pos" => 'ordinal', "token" => $word['token']));
+                        break;
 
-                case '$,':
-                case '$.':
-                case '$(':
-                    // DO NOTHING WITH PUNCTUATION
-                    break;
+                    case '$,':
+                    case '$.':
+                    case '$(':
+                        // DO NOTHING WITH PUNCTUATION
+                        break;
 
-                default:
-                    array_push($out, array("pos" => 'unclassified', "token" => $tag['token'] . ' (May be ' . $tag['tag'] .')'));
-                    break;
+                    default:
+                        array_push($out, array("pos" => 'unclassified', "token" => $word['token'] . ' (May be ' . $word['tag'] . ')'));
+                        break;
+                }
             }
         }
         echo json_encode($out);
